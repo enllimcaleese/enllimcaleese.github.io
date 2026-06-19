@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reliance Pathways for Approving Medicines in LMICs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #2d3748; --ink2: #4a5568; --ink3: #718096;
+  --paper: #ffffff; --paper2: #f7fafc; --paper3: #edf2f7;
+  --accent: #e53e3e; --accent2: #3182ce;
+  --border: rgba(45,55,72,0.1);
+}
+body { font-family: "DM Sans", sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; }
+
+.header { border-bottom: 3px solid var(--accent); padding: 28px 36px 20px; position: relative; background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%); }
+.header::after { content: ""; position: absolute; bottom: 3px; left: 36px; right: 36px; height: 1px; background: var(--ink); opacity: .2; }
+.header-label { font-family: "DM Mono", monospace; font-size: 10px; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+h1 { font-family: "DM Serif Display", serif; font-size: 30px; font-weight: 400; line-height: 1.15; }
+h1 em { font-style: italic; color: #3182ce; font-weight: 500; }
+.header-meta { font-size: 12px; color: var(--ink3); margin-top: 8px; font-weight: 300; line-height: 1.6; }
+
+.filters { padding: 18px 36px; background: #ffffff; border-bottom: 2px solid var(--border); display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.filter-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 160px; }
+.filter-label { font-family: "DM Mono", monospace; font-size: 9px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); }
+select { font-family: "DM Sans", sans-serif; font-size: 13px; color: var(--ink); background: var(--paper); border: 1px solid var(--border); border-radius: 3px; padding: 8px 28px 8px 10px; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%231a1a2e' opacity='.4'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; cursor: pointer; width: 100%; }
+select:focus { outline: none; border-color: var(--accent2); }
+.reset-btn { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink3); background: none; border: 1px solid var(--border); border-radius: 3px; padding: 8px 14px; cursor: pointer; transition: all .15s; white-space: nowrap; align-self: flex-end; }
+.reset-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+.main { padding: 28px 36px; }
+
+.empty-state { text-align: center; padding: 70px 20px; }
+.empty-title { font-family: "DM Serif Display", serif; font-size: 22px; color: var(--ink2); margin-bottom: 8px; font-weight: 400; }
+.empty-sub { font-size: 13px; color: var(--ink3); font-weight: 300; max-width: 400px; margin: 0 auto; line-height: 1.6; }
+
+.flow-label { font-family: "DM Mono", monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 4px; }
+.flow-title { font-family: "DM Serif Display", serif; font-size: 20px; font-weight: 400; color: var(--ink); margin-bottom: 18px; }
+
+.legend { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--ink3); font-weight: 300; }
+.legend-swatch { width: 24px; height: 11px; border-radius: 2px; flex-shrink: 0; }
+
+.flowchart { overflow-x: auto; padding-bottom: 4px; }
+.flow-svg-wrap { min-width: 600px; }
+
+.node-lbl { font-family: "DM Sans", sans-serif; font-size: 12px; font-weight: 600; fill: #1f2937; }
+.node-sub { font-family: "DM Sans", sans-serif; font-size: 9px; fill: #9a9ab0; }
+.since { font-family: "DM Mono", monospace; font-size: 9px; }
+
+.click-hint { font-family: "DM Mono", monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); margin: 14px 0 8px; }
+
+.cards { display: flex; flex-direction: column; gap: 10px; }
+.card { background: var(--paper); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+.card:hover { border-color: rgba(26,26,46,.25); box-shadow: 0 2px 10px rgba(26,26,46,.06); }
+.card.open { border-color: var(--accent2); }
+.card-hd { display: flex; align-items: center; gap: 12px; padding: 13px 16px; }
+.card-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.card-name { font-family: "DM Serif Display", serif; font-size: 15px; font-weight: 400; flex: 1; }
+.card-tag { font-family: "DM Mono", monospace; font-size: 9px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; white-space: nowrap; }
+.card-chev { font-size: 11px; color: var(--ink3); transition: transform .2s; flex-shrink: 0; }
+.card.open .card-chev { transform: rotate(180deg); }
+.card-bd { display: none; padding: 0 16px 16px; border-top: 1px solid var(--border); }
+.card.open .card-bd { display: block; }
+.card-desc { font-size: 13px; font-weight: 300; line-height: 1.7; color: var(--ink2); margin: 14px 0 14px; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.card-cell { background: var(--paper2); border-radius: 3px; padding: 9px 11px; }
+.cell-lbl { font-family: "DM Mono", monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 4px; }
+.cell-val { font-size: 12px; font-weight: 500; color: var(--ink); line-height: 1.4; }
+
+@media (max-width: 600px) {
+  .header { padding: 20px 18px 16px; }
+  .filters { padding: 14px 18px; }
+  .main { padding: 18px; }
+  h1 { font-size: 22px; }
+  .card-tag { display: none; }
+}
+
+/* Tooltip styles for acronyms */
+.acronym {
+  position: relative;
+  cursor: help;
+  border-bottom: 1px dotted var(--ink2);
+  text-decoration: none;
+}
+
+.acronym .tooltip {
+  visibility: hidden;
+  position: absolute;
+  z-index: 1000;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1f2937;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.acronym .tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #1f2937 transparent transparent transparent;
+}
+
+.acronym:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Reliance Pathways for<br>Approving Medicines in <em>LMICs</em></h1>
+  <p class="header-meta">
+    Select medicine type and disease to generate all regulatory reliance pathways available for your product.
+  </p>
+</div>
+
+<div class="filters">
+  <div class="filter-group">
+    <span class="filter-label">Medicine type</span>
+    <select id="sel-type" onchange="render()">
+      <option value="">Select medicine type...</option>
+      <option value="medicines">Medicines</option>
+      <option value="vaccines">Vaccines</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Disease / indication</span>
+    <select id="sel-disease" onchange="render()">
+      <option value="">Select disease...</option>
+      <option value="apnoea">Apnoea in preterm infants</option>
+      <option value="bacterial_children">Bacterial infections in children</option>
+      <option value="cancer">Cancer</option>
+      <option value="cchf">Crimean-Congo haemorrhagic fever</option>
+      <option value="chikungunya">Chikungunya</option>
+      <option value="cholera">Cholera</option>
+      <option value="covid">COVID-19</option>
+      <option value="dengue">Dengue</option>
+      <option value="diabetes">Diabetes</option>
+      <option value="diarrhoeal">Diarrhoeal disease</option>
+      <option value="diphtheria">Diphtheria</option>
+      <option value="disease_x">Disease X</option>
+      <option value="tobacco">Disorders caused by tobacco use</option>
+      <option value="ebola">Ebola virus disease</option>
+      <option value="hib">Haemophilus influenzae type B (Hib)</option>
+      <option value="hepatitis">Hepatitis B / C</option>
+      <option value="hepatitis_a">Hepatitis A</option>
+      <option value="hepatitis_e">Hepatitis E</option>
+      <option value="hiv">HIV / AIDS</option>
+      <option value="hpv">Human papillomavirus (HPV)</option>
+      <option value="influenza">Influenza</option>
+      <option value="japanese_enceph">Japanese encephalitis</option>
+      <option value="lassa">Lassa fever</option>
+      <option value="malaria">Malaria</option>
+      <option value="marburg">Marburg virus disease</option>
+      <option value="maternal">Maternal and reproductive health</option>
+      <option value="measles">Measles</option>
+      <option value="meningitis">Meningitis</option>
+      <option value="mers_sars">Middle East respiratory syndrome coronavirus (MERS-CoV) and Severe Acute Respiratory Syndrome (SARS)</option>
+      <option value="mdr_bacterial">Multi-drug resistant bacterial infections</option>
+      <option value="mpox">Mpox</option>
+      <option value="ntds">Neglected tropical diseases (NTDs)</option>
+      <option value="nipah">Nipah and henipaviral diseases</option>
+      <option value="pain">Pain management</option>
+      <option value="pertussis">Pertussis</option>
+      <option value="pneumococcal">Pneumococcal disease</option>
+      <option value="polio">Polio</option>
+      <option value="rabies">Rabies</option>
+      <option value="rsv">Respiratory Syncytial Virus (RSV)</option>
+      <option value="rift_valley">Rift Valley fever</option>
+      <option value="rotavirus">Rotavirus (Rota)</option>
+      <option value="rubella">Rubella</option>
+      <option value="tetanus">Tetanus</option>
+      <option value="tb">Tuberculosis</option>
+      <option value="typhoid">Typhoid</option>
+      <option value="varicella">Varicella</option>
+      <option value="yellow_fever">Yellow fever</option>
+      <option value="zika">Zika</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Target country <span style="font-weight:300;text-transform:none;letter-spacing:0;font-size:9px">(optional)</span></span>
+    <select id="sel-country" onchange="render()">
+      <option value="">All low and middle income countries</option>
+      <optgroup label="Africa">
+        <option value="algeria">Algeria</option>
+        <option value="angola">Angola</option>
+        <option value="benin">Benin</option>
+        <option value="botswana">Botswana</option>
+        <option value="burkina_faso">Burkina Faso</option>
+        <option value="burundi">Burundi</option>
+        <option value="cabo_verde">Cabo Verde</option>
+        <option value="cameroon">Cameroon</option>
+        <option value="central_african_republic">Central African Republic</option>
+        <option value="chad">Chad</option>
+        <option value="comoros">Comoros</option>
+        <option value="congo">Congo (Republic of)</option>
+        <option value="cote_divoire">Côte d'Ivoire</option>
+        <option value="drc">Democratic Republic of the Congo</option>
+        <option value="djibouti">Djibouti</option>
+        <option value="egypt">Egypt</option>
+        <option value="eritrea">Eritrea</option>
+        <option value="eswatini">Eswatini</option>
+        <option value="ethiopia">Ethiopia</option>
+        <option value="gabon">Gabon</option>
+        <option value="gambia">Gambia</option>
+        <option value="ghana">Ghana</option>
+        <option value="guinea">Guinea</option>
+        <option value="guinea_bissau">Guinea-Bissau</option>
+        <option value="kenya">Kenya</option>
+        <option value="lesotho">Lesotho</option>
+        <option value="liberia">Liberia</option>
+        <option value="libya">Libya</option>
+        <option value="madagascar">Madagascar</option>
+        <option value="malawi">Malawi</option>
+        <option value="mali">Mali</option>
+        <option value="mauritania">Mauritania</option>
+        <option value="mauritius">Mauritius</option>
+        <option value="morocco">Morocco</option>
+        <option value="mozambique">Mozambique</option>
+        <option value="namibia">Namibia</option>
+        <option value="niger">Niger</option>
+        <option value="nigeria">Nigeria</option>
+        <option value="rwanda">Rwanda</option>
+        <option value="sao_tome">São Tomé and Príncipe</option>
+        <option value="senegal">Senegal</option>
+        <option value="sierra_leone">Sierra Leone</option>
+        <option value="somalia">Somalia</option>
+        <option value="south_africa">South Africa</option>
+        <option value="south_sudan">South Sudan</option>
+        <option value="sudan">Sudan</option>
+        <option value="tanzania">Tanzania</option>
+        <option value="togo">Togo</option>
+        <option value="tunisia">Tunisia</option>
+        <option value="uganda">Uganda</option>
+        <option value="zambia">Zambia</option>
+        <option value="zimbabwe">Zimbabwe</option>
+      </optgroup>
+      <optgroup label="Asia">
+        <option value="afghanistan">Afghanistan</option>
+        <option value="bangladesh">Bangladesh</option>
+        <option value="bhutan">Bhutan</option>
+        <option value="cambodia">Cambodia</option>
+        <option value="china">China</option>
+        <option value="india">India</option>
+        <option value="indonesia">Indonesia</option>
+        <option value="jordan">Jordan</option>
+        <option value="kazakhstan">Kazakhstan</option>
+        <option value="kyrgyzstan">Kyrgyzstan</option>
+        <option value="laos">Lao PDR</option>
+        <option value="lebanon">Lebanon</option>
+        <option value="malaysia">Malaysia</option>
+        <option value="maldives">Maldives</option>
+        <option value="mongolia">Mongolia</option>
+        <option value="myanmar">Myanmar</option>
+        <option value="nepal">Nepal</option>
+        <option value="pakistan">Pakistan</option>
+        <option value="palestine">Palestine</option>
+        <option value="philippines">Philippines</option>
+        <option value="sri_lanka">Sri Lanka</option>
+        <option value="syria">Syria</option>
+        <option value="tajikistan">Tajikistan</option>
+        <option value="thailand">Thailand</option>
+        <option value="timor_leste">Timor-Leste</option>
+        <option value="turkmenistan">Turkmenistan</option>
+        <option value="uzbekistan">Uzbekistan</option>
+        <option value="vietnam">Vietnam</option>
+        <option value="yemen">Yemen</option>
+      </optgroup>
+      <optgroup label="Europe & Central Asia">
+        <option value="albania">Albania</option>
+        <option value="armenia">Armenia</option>
+        <option value="azerbaijan">Azerbaijan</option>
+        <option value="belarus">Belarus</option>
+        <option value="bosnia">Bosnia and Herzegovina</option>
+        <option value="georgia">Georgia</option>
+        <option value="kosovo">Kosovo</option>
+        <option value="moldova">Moldova</option>
+        <option value="montenegro">Montenegro</option>
+        <option value="north_macedonia">North Macedonia</option>
+        <option value="serbia">Serbia</option>
+        <option value="turkey">Türkiye</option>
+        <option value="ukraine">Ukraine</option>
+      </optgroup>
+      <optgroup label="Latin America & Caribbean">
+        <option value="belize">Belize</option>
+        <option value="bolivia">Bolivia</option>
+        <option value="brazil">Brazil</option>
+        <option value="colombia">Colombia</option>
+        <option value="costa_rica">Costa Rica</option>
+        <option value="cuba">Cuba</option>
+        <option value="dominica">Dominica</option>
+        <option value="dominican_republic">Dominican Republic</option>
+        <option value="ecuador">Ecuador</option>
+        <option value="el_salvador">El Salvador</option>
+        <option value="grenada">Grenada</option>
+        <option value="guatemala">Guatemala</option>
+        <option value="guyana">Guyana</option>
+        <option value="haiti">Haiti</option>
+        <option value="honduras">Honduras</option>
+        <option value="jamaica">Jamaica</option>
+        <option value="mexico">Mexico</option>
+        <option value="nicaragua">Nicaragua</option>
+        <option value="paraguay">Paraguay</option>
+        <option value="peru">Peru</option>
+        <option value="saint_lucia">Saint Lucia</option>
+        <option value="saint_vincent">Saint Vincent and the Grenadines</option>
+        <option value="suriname">Suriname</option>
+        <option value="venezuela">Venezuela</option>
+      </optgroup>
+      <optgroup label="Middle East">
+        <option value="iran">Iran</option>
+        <option value="iraq">Iraq</option>
+      </optgroup>
+      <optgroup label="Pacific">
+        <option value="fiji">Fiji</option>
+        <option value="kiribati">Kiribati</option>
+        <option value="marshall_islands">Marshall Islands</option>
+        <option value="micronesia">Micronesia</option>
+        <option value="papua_new_guinea">Papua New Guinea</option>
+        <option value="samoa">Samoa</option>
+        <option value="solomon_islands">Solomon Islands</option>
+        <option value="tonga">Tonga</option>
+        <option value="tuvalu">Tuvalu</option>
+        <option value="vanuatu">Vanuatu</option>
+      </optgroup>
+    </select>
+  </div>
+  <button class="reset-btn" onclick="resetAll()">Reset</button>
+</div>
+
+<div class="main" id="output">
+  <div class="empty-state">
+    <div class="empty-title">Select a medicine type and disease</div>
+    <div class="empty-sub">The regulatory pathway flowchart will appear here, showing all available routes to market.</div>
+  </div>
+</div>
+
+<script>
+// CRP Participation data - African countries in each CRP pathway
+var CRP_PQ_COUNTRIES = [
+  // Official WHO PQ CRP participating countries (as of June 2024)
+  // Africa
+  "angola", "benin", "botswana", "burkina_faso", "burundi", "cabo_verde",
+  "cameroon", "central_african_republic", "chad", "comoros", "cote_divoire",
+  "drc", "eritrea", "ethiopia", "gabon", "gambia", "ghana", "guinea",
+  "kenya", "lesotho", "liberia", "madagascar", "malawi", "mali",
+  "mauritania", "mozambique", "namibia", "nigeria", "rwanda",
+  "sao_tome", "senegal", "sierra_leone", "south_africa", "south_sudan",
+  "sudan", "tanzania", "togo", "tunisia", "uganda", "zambia", "zimbabwe",
+  // Asia
+  "armenia", "azerbaijan", "bangladesh", "belarus", "bhutan", "kazakhstan",
+  "kyrgyzstan", "laos", "malaysia", "maldives", "mongolia", "nepal",
+  "pakistan", "philippines", "sri_lanka", "thailand", "timor_leste",
+  "uzbekistan", "vietnam", "yemen",
+  // Europe & Central Asia
+  "georgia", "moldova", "serbia", "turkey", "ukraine",
+  // Latin America & Caribbean (CARICOM countries not individually listed)
+  "el_salvador", "honduras", "paraguay"
+];
+
+var CRP_SRA_COUNTRIES = [
+  // Official WHO SRA CRP participating countries (as of November 2024)
+  // Africa
+  "angola", "benin", "botswana", "burkina_faso", "burundi", "cabo_verde",
+  "cameroon", "central_african_republic", "chad", "comoros", "congo",
+  "cote_divoire", "drc", "eritrea", "ethiopia", "gabon", "gambia", "ghana",
+  "guinea", "kenya", "lesotho", "liberia", "madagascar", "malawi", "mali",
+  "mauritania", "mozambique", "namibia", "niger", "nigeria", "rwanda",
+  "sao_tome", "senegal", "sierra_leone", "south_africa", "tanzania",
+  "togo", "tunisia", "uganda", "zambia", "zimbabwe",
+  // Asia
+  "bangladesh", "bhutan", "jordan", "kazakhstan", "laos", "malaysia",
+  "maldives", "nepal", "pakistan", "philippines", "sri_lanka", "thailand",
+  "timor_leste", "vietnam", "yemen",
+  // Europe & Central Asia
+  "georgia", "montenegro", "serbia", "turkey", "ukraine",
+  // Latin America & Caribbean
+  "el_salvador", "honduras", "paraguay",
+  // Pacific
+  "papua_new_guinea"
+];
+
+
+
+// Sub-Saharan African countries
+var SUBSAHARAN_AFRICA_COUNTRIES = [
+  "angola", "benin", "botswana", "burkina_faso", "burundi", "cabo_verde",
+  "cameroon", "central_african_republic", "chad", "comoros", "congo",
+  "cote_divoire", "drc", "djibouti", "eritrea", "eswatini", "ethiopia",
+  "gabon", "gambia", "ghana", "guinea", "guinea_bissau", "kenya",
+  "lesotho", "liberia", "madagascar", "malawi", "mali", "mauritania",
+  "mauritius", "mozambique", "namibia", "niger", "nigeria", "rwanda",
+  "sao_tome", "senegal", "sierra_leone", "somalia", "south_africa",
+  "south_sudan", "sudan", "tanzania", "togo", "uganda", "zambia", "zimbabwe"
+];
+
+var COUNTRIES = {
+  // Africa
+  "algeria": "Algeria", "angola": "Angola", "benin": "Benin", "botswana": "Botswana",
+  "burkina_faso": "Burkina Faso", "burundi": "Burundi", "cabo_verde": "Cabo Verde",
+  "cameroon": "Cameroon", "central_african_republic": "Central African Republic",
+  "chad": "Chad", "comoros": "Comoros", "congo": "Congo (Republic of)",
+  "cote_divoire": "Côte d'Ivoire", "drc": "Democratic Republic of the Congo",
+  "djibouti": "Djibouti", "egypt": "Egypt", "eritrea": "Eritrea", "eswatini": "Eswatini",
+  "ethiopia": "Ethiopia", "gabon": "Gabon", "gambia": "Gambia", "ghana": "Ghana",
+  "guinea": "Guinea", "guinea_bissau": "Guinea-Bissau", "kenya": "Kenya",
+  "lesotho": "Lesotho", "liberia": "Liberia", "libya": "Libya", "madagascar": "Madagascar",
+  "malawi": "Malawi", "mali": "Mali", "mauritania": "Mauritania", "mauritius": "Mauritius",
+  "morocco": "Morocco", "mozambique": "Mozambique", "namibia": "Namibia", "niger": "Niger",
+  "nigeria": "Nigeria", "rwanda": "Rwanda", "sao_tome": "São Tomé and Príncipe",
+  "senegal": "Senegal", "sierra_leone": "Sierra Leone", "somalia": "Somalia",
+  "south_africa": "South Africa", "south_sudan": "South Sudan", "sudan": "Sudan",
+  "tanzania": "Tanzania", "togo": "Togo", "tunisia": "Tunisia", "uganda": "Uganda",
+  "zambia": "Zambia", "zimbabwe": "Zimbabwe",
+  // Asia
+  "afghanistan": "Afghanistan", "bangladesh": "Bangladesh", "bhutan": "Bhutan",
+  "cambodia": "Cambodia", "china": "China", "india": "India", "indonesia": "Indonesia",
+  "jordan": "Jordan", "kazakhstan": "Kazakhstan", "kyrgyzstan": "Kyrgyzstan",
+  "laos": "Lao PDR", "lebanon": "Lebanon", "malaysia": "Malaysia", "maldives": "Maldives",
+  "mongolia": "Mongolia", "myanmar": "Myanmar", "nepal": "Nepal", "pakistan": "Pakistan",
+  "palestine": "Palestine", "philippines": "Philippines", "sri_lanka": "Sri Lanka",
+  "syria": "Syria", "tajikistan": "Tajikistan", "thailand": "Thailand",
+  "timor_leste": "Timor-Leste", "turkmenistan": "Turkmenistan", "uzbekistan": "Uzbekistan",
+  "vietnam": "Vietnam", "yemen": "Yemen",
+  // Europe & Central Asia
+  "albania": "Albania", "armenia": "Armenia", "azerbaijan": "Azerbaijan",
+  "belarus": "Belarus", "bosnia": "Bosnia and Herzegovina", "georgia": "Georgia",
+  "kosovo": "Kosovo", "moldova": "Moldova", "montenegro": "Montenegro",
+  "north_macedonia": "North Macedonia", "serbia": "Serbia", "turkey": "Türkiye",
+  "ukraine": "Ukraine",
+  // Latin America & Caribbean
+  "belize": "Belize", "bolivia": "Bolivia", "brazil": "Brazil", "colombia": "Colombia",
+  "costa_rica": "Costa Rica", "cuba": "Cuba", "dominica": "Dominica",
+  "dominican_republic": "Dominican Republic", "ecuador": "Ecuador",
+  "el_salvador": "El Salvador", "grenada": "Grenada", "guatemala": "Guatemala",
+  "guyana": "Guyana", "haiti": "Haiti", "honduras": "Honduras", "jamaica": "Jamaica",
+  "mexico": "Mexico", "nicaragua": "Nicaragua", "paraguay": "Paraguay", "peru": "Peru",
+  "saint_lucia": "Saint Lucia", "saint_vincent": "Saint Vincent and the Grenadines",
+  "suriname": "Suriname", "venezuela": "Venezuela",
+  // Middle East
+  "iran": "Iran", "iraq": "Iraq",
+  // Pacific
+  "fiji": "Fiji", "kiribati": "Kiribati", "marshall_islands": "Marshall Islands",
+  "micronesia": "Micronesia", "papua_new_guinea": "Papua New Guinea", "samoa": "Samoa",
+  "solomon_islands": "Solomon Islands", "tonga": "Tonga", "tuvalu": "Tuvalu",
+  "vanuatu": "Vanuatu"
+};
+
+var ELIG = {
+  // MEDICINES (all) - broad category covering all medicines
+  "medicines__hiv":       ["fda_ta","eum4all","maghp","wla","whopq_full"],
+  "medicines__tb":        ["eum4all","maghp","wla","whopq_full"],
+  "medicines__malaria":   ["eum4all","maghp","wla","whopq_full"],
+  "medicines__hepatitis": ["wla","whopq_full"],
+  "medicines__ntds":      ["eum4all","maghp","wla","whopq_full"],
+  "medicines__maternal":  ["eum4all","maghp","wla","whopq_full"],
+  "medicines__covid":     ["eum4all","maghp","wla","whopq_full"],
+  "medicines__cancer":    ["eum4all","maghp","wla","whopq_full"],
+  "medicines__diabetes":  ["eum4all","maghp","wla","whopq_full"],
+  "medicines__pain":      ["eum4all","maghp","wla","whopq_full"],
+  // VACCINES (all) - broad category covering all vaccines
+  "vaccines__meningitis":    ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__yellow_fever":  ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__cholera":       ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__dengue":        ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__mpox":          ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__hpv":           ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__measles":       ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__pneumococcal":  ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__rotavirus":     ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__rsv":           ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__typhoid":       ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__polio":         ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__diphtheria":    ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__pertussis":     ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__tetanus":       ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__hib":           ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__rubella":       ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__ebola":         ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__hepatitis_a":   ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__hepatitis_e":   ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__rabies":        ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__varicella":     ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__chikungunya":   ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__japanese_enceph":["eum4all","maghp","wla","whopq_full"],
+  "vaccines__influenza":     ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__covid":         ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__tb":            ["eum4all","maghp","wla","whopq_full"],
+  
+  "vaccine__hiv":       ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__tb":        ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__malaria":   ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__covid":     ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__ntd":       ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__maternal":  ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__hepatitis": ["wla","whopq_full"],
+  "generic__hiv":       ["fda_ta","eum4all","maghp","wla","whopq_full"],
+  "generic__tb":        ["eum4all","maghp","wla","whopq_full"],
+  "generic__malaria":   ["eum4all","maghp","wla","whopq_full"],
+  "generic__ntd":       ["wla","whopq_full"],
+  "generic__maternal":  ["eum4all","maghp","wla","whopq_full"],
+  "generic__hepatitis": ["maghp","wla","whopq_full"],
+  "generic__covid":     ["maghp","wla","whopq_full"],
+  "originator__hiv": ["eum4all","maghp","wla","whopq_full"],
+  "originator__tb": ["eum4all","maghp","wla","whopq_full"],
+  "originator__malaria": ["eum4all","maghp","wla","whopq_full"],
+  "originator__ntd": ["eum4all","maghp","wla","whopq_full"],
+  "originator__maternal": ["eum4all","maghp","wla","whopq_full"],
+  "originator__hepatitis": ["wla","whopq_full"],
+  "originator__covid": ["eum4all","maghp","wla","whopq_full"],
+  "biological__hiv":      ["eum4all","maghp","wla","whopq_full"],
+  "biological__tb":       ["eum4all","maghp","wla","whopq_full"],
+  "biological__malaria":  ["eum4all","maghp","wla","whopq_full"],
+  "biological__ntd":      ["eum4all","maghp","wla","whopq_full"],
+  "biological__maternal": ["eum4all","maghp","wla","whopq_full"],
+  "biological__hepatitis":["wla"],
+  "biological__covid":    ["eum4all","maghp","wla","whopq_full"],
+  "biosimilar__hiv":      ["eum4all","maghp","wla","whopq_full"],
+  "biosimilar__tb":       ["eum4all","maghp","wla","whopq_full"],
+  "biosimilar__malaria":  ["eum4all","maghp","wla","whopq_full"],
+  "biosimilar__hepatitis":["wla"],
+  "biosimilar__covid":    ["maghp","wla","whopq_full"],
+  "biosimilar__maternal": ["eum4all","maghp","wla","whopq_full"],
+  "biosimilar__ntd":      ["wla","whopq_full"],
+  "ntd__ntd":      ["eum4all","maghp","wla","whopq_full"],
+  "ntd__hiv":      ["fda_ta","eum4all","maghp","wla","whopq_full"],
+  "ntd__tb":       ["eum4all","maghp","wla","whopq_full"],
+  "ntd__malaria":  ["eum4all","maghp","wla","whopq_full"],
+  "ntd__maternal": ["eum4all","maghp","wla","whopq_full"],
+  "ntd__covid":    ["wla","whopq_full"],
+  "ntd__hepatitis":["wla","whopq_full"],
+  // New WHO PQ eligible diseases (all medicine types eligible)
+  "vaccine__bacterial_children":       ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__diarrhoeal":                ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__ebola":                     ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__influenza":                 ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__diabetes":                   ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__cancer":                ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__mdr_bacterial":             ["eum4all","maghp","wla","whopq_full"],
+  "generic__bacterial_children":        ["maghp","wla","whopq_full"],
+  "generic__diarrhoeal":                ["maghp","wla","whopq_full"],
+  "generic__ebola":                     ["maghp","wla","whopq_full"],
+  "generic__influenza":                 ["maghp","wla","whopq_full"],
+  "generic__diabetes":                   ["wla","whopq_full"],
+  "generic__cancer":                ["maghp","wla","whopq_full"],
+  "generic__mdr_bacterial":             ["maghp","wla","whopq_full"],
+  "originator__bacterial_children": ["eum4all","maghp","wla","whopq_full"],
+  "originator__diarrhoeal": ["eum4all","maghp","wla","whopq_full"],
+  "originator__ebola": ["eum4all","maghp","wla","whopq_full"],
+  "originator__influenza": ["eum4all","maghp","wla","whopq_full"],
+  "originator__diabetes": ["eum4all","maghp","wla","whopq_full"],
+  "originator__cancer": ["eum4all","maghp","wla","whopq_full"],
+  "originator__mdr_bacterial": ["eum4all","maghp","wla","whopq_full"],
+  "biological__bacterial_children":     ["eum4all","maghp","wla","whopq_full"],
+  "biological__diarrhoeal":             ["eum4all","maghp","wla","whopq_full"],
+  "biological__ebola":                  ["eum4all","maghp","wla","whopq_full"],
+  "biological__influenza":              ["eum4all","maghp","wla","whopq_full"],
+  "biological__diabetes":                ["eum4all","maghp","wla","whopq_full"],
+  "biological__cancer":             ["eum4all","maghp","wla","whopq_full"],
+  "biological__mdr_bacterial":          ["eum4all","maghp","wla","whopq_full"],
+  "biosimilar__bacterial_children":     ["maghp","wla","whopq_full"],
+  "biosimilar__diarrhoeal":             ["maghp","wla","whopq_full"],
+  "biosimilar__ebola":                  ["maghp","wla","whopq_full"],
+  "biosimilar__influenza":              ["maghp","wla","whopq_full"],
+  "biosimilar__diabetes":                ["wla","whopq_full"],
+  "biosimilar__cancer":             ["maghp","wla","whopq_full"],
+  "biosimilar__mdr_bacterial":          ["maghp","wla","whopq_full"],
+  "ntd__bacterial_children":            ["eum4all","maghp","wla","whopq_full"],
+  "ntd__diarrhoeal":                    ["eum4all","maghp","wla","whopq_full"],
+  "ntd__ebola":                         ["eum4all","maghp","wla","whopq_full"],
+  "ntd__influenza":                     ["eum4all","maghp","wla","whopq_full"],
+  "ntd__diabetes":                       ["eum4all","maghp","wla","whopq_full"],
+  "ntd__cancer":                    ["eum4all","maghp","wla","whopq_full"],
+  "ntd__mdr_bacterial":                 ["eum4all","maghp","wla","whopq_full"],
+  // Antiretrovirals (ARV) - FDA TA eligible for HIV/AIDS
+  "arv__hiv":                   ["fda_ta","eum4all","maghp","wla","whopq_full"],
+  "arv__tb":                    ["eum4all","maghp","wla","whopq_full"],
+  "arv__malaria":               ["eum4all","maghp","wla","whopq_full"],
+  "arv__hepatitis":             ["eum4all","maghp","wla","whopq_full"],
+  "arv__ntds":                  ["eum4all","maghp","wla","whopq_full"],
+  "arv__maternal":              ["eum4all","maghp","wla","whopq_full"],
+  "arv__covid":                 ["eum4all","maghp","wla","whopq_full"],
+  "arv__bacterial_children":    ["eum4all","maghp","wla","whopq_full"],
+  "arv__diarrhoeal":            ["eum4all","maghp","wla","whopq_full"],
+  "arv__ebola":                 ["eum4all","maghp","wla","whopq_full"],
+  "arv__influenza":             ["eum4all","maghp","wla","whopq_full"],
+  "arv__diabetes":               ["eum4all","maghp","wla","whopq_full"],
+  "arv__cancer":            ["eum4all","maghp","wla","whopq_full"],
+  "arv__mdr_bacterial":         ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__apnoea":                ["eum4all","maghp","wla","whopq_full"],
+  "generic__apnoea":                ["maghp","wla","whopq_full"],
+  "originator__apnoea": ["eum4all","maghp","wla","whopq_full"],
+  "biological__apnoea":             ["eum4all","maghp","wla","whopq_full"],
+  "biosimilar__apnoea":             ["wla","whopq_full"],
+  "ntd__apnoea":                    ["eum4all","maghp","wla","whopq_full"],
+  "arv__apnoea":                    ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__tobacco":                ["eum4all","maghp","wla","whopq_full"],
+  "generic__tobacco":                ["maghp","wla","whopq_full"],
+  "originator__tobacco": ["eum4all","maghp","wla","whopq_full"],
+  "biological__tobacco":             ["eum4all","maghp","wla","whopq_full"],
+  "biosimilar__tobacco":             ["wla","whopq_full"],
+  "ntd__tobacco":                    ["eum4all","maghp","wla","whopq_full"],
+  "arv__tobacco":                    ["eum4all","maghp","wla","whopq_full"],
+  // Human insulin and insulin analogues (medicine type)
+  "insulin__hiv":                   ["eum4all","maghp","wla","whopq_full"],
+  "insulin__tb":                    ["eum4all","maghp","wla","whopq_full"],
+  "insulin__malaria":               ["eum4all","maghp","wla","whopq_full"],
+  "insulin__hepatitis":             ["eum4all","maghp","wla","whopq_full"],
+  "insulin__ntds":                  ["eum4all","maghp","wla","whopq_full"],
+  "insulin__maternal":              ["eum4all","maghp","wla","whopq_full"],
+  "insulin__covid":                 ["eum4all","maghp","wla","whopq_full"],
+  "insulin__bacterial_children":    ["eum4all","maghp","wla","whopq_full"],
+  "insulin__diarrhoeal":            ["eum4all","maghp","wla","whopq_full"],
+  "insulin__ebola":                 ["eum4all","maghp","wla","whopq_full"],
+  "insulin__influenza":             ["eum4all","maghp","wla","whopq_full"],
+  "insulin__diabetes":              ["eum4all","maghp","wla","whopq_full"],
+  "insulin__cancer":            ["eum4all","maghp","wla","whopq_full"],
+  "insulin__mdr_bacterial":         ["eum4all","maghp","wla","whopq_full"],
+  "insulin__apnoea":                ["eum4all","maghp","wla","whopq_full"],
+  "insulin__tobacco":               ["eum4all","maghp","wla","whopq_full"],
+  // Analgesics (medicine type) - WHO PQ eligible
+  "analgesics__hiv":                   ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__tb":                    ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__malaria":               ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__hepatitis":             ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__ntds":                  ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__maternal":              ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__covid":                 ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__bacterial_children":    ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__diarrhoeal":            ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__ebola":                 ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__influenza":             ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__diabetes":              ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__cancer":            ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__mdr_bacterial":         ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__apnoea":                ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__tobacco":               ["eum4all","maghp","wla","whopq_full"],
+  // Rituximab and trastuzumab (cancer biologics) - medicine type
+  "cancer_bio__hiv":                   ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__tb":                    ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__malaria":               ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__hepatitis":             ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__ntds":                  ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__maternal":              ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__covid":                 ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__bacterial_children":    ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__diarrhoeal":            ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__ebola":                 ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__influenza":             ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__diabetes":              ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__cancer":              ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__mdr_bacterial":         ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__apnoea":                ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__tobacco":               ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__pain":                ["eum4all","maghp","wla","whopq_full"],
+  "generic__pain":                ["maghp","wla","whopq_full"],
+  "originator__pain": ["eum4all","maghp","wla","whopq_full"],
+  "biological__pain":             ["eum4all","maghp","wla","whopq_full"],
+  "biosimilar__pain":             ["maghp","wla","whopq_full"],
+  "ntd__pain":                    ["eum4all","maghp","wla","whopq_full"],
+  "arv__pain":                    ["eum4all","maghp","wla","whopq_full"],
+  "insulin__pain":                ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__pain":             ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__pain":             ["eum4all","maghp","wla","whopq_full"],
+  // Vaccine-preventable diseases
+  "vaccine__rsv":            ["eum4all","maghp","wla"],
+  "vaccine__diphtheria":     ["eum4all","maghp","wla"],
+  "vaccine__pertussis":      ["eum4all","maghp","wla"],
+  "vaccine__tetanus":        ["eum4all","maghp","wla"],
+  "vaccine__hib":            ["eum4all","maghp","wla"],
+  "vaccine__polio":          ["eum4all","maghp","wla"],
+  "vaccine__measles":        ["eum4all","maghp","wla"],
+  "vaccine__rubella":        ["eum4all","maghp","wla"],
+  "vaccine__pneumococcal":   ["eum4all","maghp","wla"],
+  "vaccine__rotavirus":      ["eum4all","maghp","wla"],
+  "vaccine__hpv":            ["eum4all","maghp","wla"],
+  "generic__rsv":            ["maghp","wla"],
+  "generic__diphtheria":     ["maghp","wla"],
+  "generic__pertussis":      ["maghp","wla"],
+  "generic__tetanus":        ["maghp","wla"],
+  "generic__hib":            ["maghp","wla"],
+  "generic__polio":          ["maghp","wla"],
+  "generic__measles":        ["maghp","wla"],
+  "generic__rubella":        ["maghp","wla"],
+  "generic__pneumococcal":   ["maghp","wla"],
+  "generic__rotavirus":      ["maghp","wla"],
+  "generic__hpv":            ["maghp","wla"],
+  "originator__rsv": ["eum4all","maghp","wla","whopq_full"],
+  "originator__diphtheria": ["eum4all","maghp","wla","whopq_full"],
+  "originator__pertussis": ["eum4all","maghp","wla","whopq_full"],
+  "originator__tetanus": ["eum4all","maghp","wla","whopq_full"],
+  "originator__hib": ["eum4all","maghp","wla","whopq_full"],
+  "originator__polio": ["eum4all","maghp","wla","whopq_full"],
+  "originator__measles": ["eum4all","maghp","wla","whopq_full"],
+  "originator__rubella": ["eum4all","maghp","wla","whopq_full"],
+  "originator__pneumococcal": ["eum4all","maghp","wla","whopq_full"],
+  "originator__rotavirus": ["eum4all","maghp","wla","whopq_full"],
+  "originator__hpv": ["eum4all","maghp","wla","whopq_full"],
+  "biological__rsv":         ["eum4all","maghp","wla"],
+  "biological__diphtheria":  ["eum4all","maghp","wla"],
+  "biological__pertussis":   ["eum4all","maghp","wla"],
+  "biological__tetanus":     ["eum4all","maghp","wla"],
+  "biological__hib":         ["eum4all","maghp","wla"],
+  "biological__polio":       ["eum4all","maghp","wla"],
+  "biological__measles":     ["eum4all","maghp","wla"],
+  "biological__rubella":     ["eum4all","maghp","wla"],
+  "biological__pneumococcal":["eum4all","maghp","wla"],
+  "biological__rotavirus":   ["eum4all","maghp","wla"],
+  "biological__hpv":         ["eum4all","maghp","wla"],
+  "biosimilar__rsv":         ["maghp","wla","whopq_full"],
+  "biosimilar__diphtheria":  ["maghp","wla","whopq_full"],
+  "biosimilar__pertussis":   ["maghp","wla","whopq_full"],
+  "biosimilar__tetanus":     ["maghp","wla","whopq_full"],
+  "biosimilar__hib":         ["maghp","wla","whopq_full"],
+  "biosimilar__polio":       ["maghp","wla","whopq_full"],
+  "biosimilar__measles":     ["maghp","wla","whopq_full"],
+  "biosimilar__rubella":     ["maghp","wla","whopq_full"],
+  "biosimilar__pneumococcal":["maghp","wla","whopq_full"],
+  "biosimilar__rotavirus":   ["maghp","wla","whopq_full"],
+  "biosimilar__hpv":         ["maghp","wla","whopq_full"],
+  "ntd__rsv":                ["eum4all","maghp","wla","whopq_full"],
+  "ntd__diphtheria":         ["eum4all","maghp","wla","whopq_full"],
+  "ntd__pertussis":          ["eum4all","maghp","wla","whopq_full"],
+  "ntd__tetanus":            ["eum4all","maghp","wla","whopq_full"],
+  "ntd__hib":                ["eum4all","maghp","wla","whopq_full"],
+  "ntd__polio":              ["eum4all","maghp","wla","whopq_full"],
+  "ntd__measles":            ["eum4all","maghp","wla","whopq_full"],
+  "ntd__rubella":            ["eum4all","maghp","wla","whopq_full"],
+  "ntd__pneumococcal":       ["eum4all","maghp","wla","whopq_full"],
+  "ntd__rotavirus":          ["eum4all","maghp","wla","whopq_full"],
+  "ntd__hpv":                ["eum4all","maghp","wla","whopq_full"],
+  "arv__rsv":                ["eum4all","maghp","wla","whopq_full"],
+  "arv__diphtheria":         ["eum4all","maghp","wla","whopq_full"],
+  "arv__pertussis":          ["eum4all","maghp","wla","whopq_full"],
+  "arv__tetanus":            ["eum4all","maghp","wla","whopq_full"],
+  "arv__hib":                ["eum4all","maghp","wla","whopq_full"],
+  "arv__polio":              ["eum4all","maghp","wla","whopq_full"],
+  "arv__measles":            ["eum4all","maghp","wla","whopq_full"],
+  "arv__rubella":            ["eum4all","maghp","wla","whopq_full"],
+  "arv__pneumococcal":       ["eum4all","maghp","wla","whopq_full"],
+  "arv__rotavirus":          ["eum4all","maghp","wla","whopq_full"],
+  "arv__hpv":                ["eum4all","maghp","wla","whopq_full"],
+  "insulin__rsv":            ["eum4all","maghp","wla","whopq_full"],
+  "insulin__diphtheria":     ["eum4all","maghp","wla","whopq_full"],
+  "insulin__pertussis":      ["eum4all","maghp","wla","whopq_full"],
+  "insulin__tetanus":        ["eum4all","maghp","wla","whopq_full"],
+  "insulin__hib":            ["eum4all","maghp","wla","whopq_full"],
+  "insulin__polio":          ["eum4all","maghp","wla","whopq_full"],
+  "insulin__measles":        ["eum4all","maghp","wla","whopq_full"],
+  "insulin__rubella":        ["eum4all","maghp","wla","whopq_full"],
+  "insulin__pneumococcal":   ["eum4all","maghp","wla","whopq_full"],
+  "insulin__rotavirus":      ["eum4all","maghp","wla","whopq_full"],
+  "insulin__hpv":            ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__rsv":         ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__diphtheria":  ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__pertussis":   ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__tetanus":     ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__hib":         ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__polio":       ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__measles":     ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__rubella":     ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__pneumococcal":["eum4all","maghp","wla"],
+  "analgesics__rotavirus":   ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__hpv":         ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__rsv":         ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__diphtheria":  ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__pertussis":   ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__tetanus":     ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__hib":         ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__polio":       ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__measles":     ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__rubella":     ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__pneumococcal":["eum4all","maghp","wla"],
+  "cancer_bio__rotavirus":   ["eum4all","maghp","wla","whopq_full"],
+  "cancer_bio__hpv":         ["eum4all","maghp","wla","whopq_full"],
+  // BCG vaccine (medicine type) - always includes EU-M4All
+  "bcg__hiv":                   ["eum4all","maghp","wla"],
+  "bcg__tb":                    ["eum4all","maghp","wla"],
+  "bcg__malaria":               ["eum4all","maghp","wla"],
+  "bcg__hepatitis":             ["eum4all","maghp","wla"],
+  "bcg__ntds":                  ["eum4all","maghp","wla"],
+  "bcg__maternal":              ["eum4all","maghp","wla"],
+  "bcg__covid":                 ["eum4all","maghp","wla"],
+  "bcg__bacterial_children":    ["eum4all","maghp","wla"],
+  "bcg__diarrhoeal":            ["eum4all","maghp","wla"],
+  "bcg__ebola":                 ["eum4all","maghp","wla"],
+  "bcg__influenza":             ["eum4all","maghp","wla"],
+  "bcg__diabetes":              ["eum4all","maghp","wla"],
+  "bcg__cancer":              ["eum4all","maghp","wla"],
+  "bcg__mdr_bacterial":         ["eum4all","maghp","wla"],
+  "bcg__apnoea":                ["eum4all","maghp","wla"],
+  "bcg__tobacco":               ["eum4all","maghp","wla"],
+  "bcg__pain":                  ["eum4all","maghp","wla"],
+  "bcg__rsv":                   ["eum4all","maghp","wla"],
+  "bcg__diphtheria":            ["eum4all","maghp","wla"],
+  "bcg__pertussis":             ["eum4all","maghp","wla"],
+  "bcg__tetanus":               ["eum4all","maghp","wla"],
+  "bcg__hib":                   ["eum4all","maghp","wla"],
+  "bcg__polio":                 ["eum4all","maghp","wla"],
+  "bcg__measles":               ["eum4all","maghp","wla"],
+  "bcg__rubella":               ["eum4all","maghp","wla"],
+  "bcg__pneumococcal":          ["eum4all","maghp","wla"],
+  "bcg__rotavirus":             ["eum4all","maghp","wla"],
+  "bcg__hpv":                   ["eum4all","maghp","wla"],
+  // Emerging infectious diseases for vaccines
+  "vaccine__cchf":         ["eum4all","maghp","wla"],
+  "vaccine__marburg":      ["eum4all","maghp","wla"],
+  "vaccine__lassa":        ["eum4all","maghp","wla"],
+  "vaccine__mers_sars":    ["eum4all","maghp","wla"],
+  "vaccine__nipah":        ["eum4all","maghp","wla"],
+  "vaccine__rift_valley":  ["eum4all","maghp","wla"],
+  "vaccine__zika":         ["eum4all","maghp","wla"],
+  "vaccine__disease_x":    ["eum4all","wla"],
+  "bcg__cchf":             ["eum4all","maghp","wla"],
+  "bcg__marburg":          ["eum4all","maghp","wla"],
+  "bcg__lassa":            ["eum4all","maghp","wla"],
+  "bcg__mers_sars":        ["eum4all","maghp","wla"],
+  "bcg__nipah":            ["eum4all","maghp","wla"],
+  "bcg__rift_valley":      ["eum4all","maghp","wla"],
+  "bcg__zika":             ["eum4all","maghp","wla"],
+  "bcg__disease_x":        ["eum4all","wla"],
+  "generic__cchf":         ["maghp","wla"],
+  "generic__marburg":      ["maghp","wla"],
+  "generic__lassa":        ["maghp","wla"],
+  "generic__mers_sars":    ["maghp","wla"],
+  "generic__nipah":        ["maghp","wla"],
+  "generic__rift_valley":  ["maghp","wla"],
+  "generic__zika":         ["maghp","wla"],
+  "generic__disease_x":    ["wla"],
+  "originator__cchf": ["eum4all","maghp","wla","whopq_full"],
+  "originator__marburg": ["eum4all","maghp","wla","whopq_full"],
+  "originator__lassa": ["eum4all","maghp","wla","whopq_full"],
+  "originator__mers_sars": ["eum4all","maghp","wla","whopq_full"],
+  "originator__nipah": ["eum4all","maghp","wla","whopq_full"],
+  "originator__rift_valley": ["eum4all","maghp","wla","whopq_full"],
+  "originator__zika": ["eum4all","maghp","wla","whopq_full"],
+  "originator__disease_x": ["eum4all","wla"],
+  "biological__cchf":      ["eum4all","maghp","wla"],
+  "biological__marburg":   ["eum4all","maghp","wla"],
+  "biological__lassa":     ["eum4all","maghp","wla"],
+  "biological__mers_sars": ["eum4all","maghp","wla"],
+  "biological__nipah":     ["eum4all","maghp","wla"],
+  "biological__rift_valley":["eum4all","maghp","wla"],
+  "biological__zika":      ["eum4all","maghp","wla"],
+  "biological__disease_x": ["eum4all","wla"],
+  "biosimilar__cchf":      ["maghp","wla"],
+  "biosimilar__marburg":   ["maghp","wla"],
+  "biosimilar__lassa":     ["maghp","wla"],
+  "biosimilar__mers_sars": ["maghp","wla"],
+  "biosimilar__nipah":     ["maghp","wla"],
+  "biosimilar__rift_valley":["maghp","wla"],
+  "biosimilar__zika":      ["maghp","wla"],
+  "biosimilar__disease_x": ["wla"],
+  "ntd__cchf":             ["eum4all","maghp","wla"],
+  "ntd__marburg":          ["eum4all","maghp","wla"],
+  "ntd__lassa":            ["eum4all","maghp","wla"],
+  "ntd__mers_sars":        ["eum4all","maghp","wla"],
+  "ntd__nipah":            ["eum4all","maghp","wla"],
+  "ntd__rift_valley":      ["eum4all","maghp","wla"],
+  "ntd__zika":             ["eum4all","maghp","wla"],
+  "ntd__disease_x":        ["eum4all","wla"],
+  "arv__cchf":             ["eum4all","maghp","wla"],
+  "arv__marburg":          ["eum4all","maghp","wla"],
+  "arv__lassa":            ["eum4all","maghp","wla"],
+  "arv__mers_sars":        ["eum4all","maghp","wla"],
+  "arv__nipah":            ["eum4all","maghp","wla"],
+  "arv__rift_valley":      ["eum4all","maghp","wla"],
+  "arv__zika":             ["eum4all","maghp","wla"],
+  "arv__disease_x":        ["eum4all","wla"],
+  "insulin__cchf":         ["eum4all","maghp","wla"],
+  "insulin__marburg":      ["eum4all","maghp","wla"],
+  "insulin__lassa":        ["eum4all","maghp","wla"],
+  "insulin__mers_sars":    ["eum4all","maghp","wla"],
+  "insulin__nipah":        ["eum4all","maghp","wla"],
+  "insulin__rift_valley":  ["eum4all","maghp","wla"],
+  "insulin__zika":         ["eum4all","maghp","wla"],
+  "insulin__disease_x":    ["eum4all","wla"],
+  "analgesics__cchf":      ["eum4all","maghp","wla"],
+  "analgesics__marburg":   ["eum4all","maghp","wla"],
+  "analgesics__lassa":     ["eum4all","maghp","wla"],
+  "analgesics__mers_sars": ["eum4all","maghp","wla"],
+  "analgesics__nipah":     ["eum4all","maghp","wla"],
+  "analgesics__rift_valley":["eum4all","maghp","wla"],
+  "analgesics__zika":      ["eum4all","maghp","wla"],
+  "analgesics__disease_x": ["eum4all","wla"],
+  "cancer_bio__cchf":      ["eum4all","maghp","wla"],
+  "cancer_bio__marburg":   ["eum4all","maghp","wla"],
+  "cancer_bio__lassa":     ["eum4all","maghp","wla"],
+  "cancer_bio__mers_sars": ["eum4all","maghp","wla"],
+  "cancer_bio__nipah":     ["eum4all","maghp","wla"],
+  "cancer_bio__rift_valley":["eum4all","maghp","wla"],
+  "cancer_bio__zika":      ["eum4all","maghp","wla"],
+  "cancer_bio__disease_x": ["eum4all","wla"],
+  // Vaccine-preventable diseases - WHO PQ Priority List aligned
+  // HIGH PRIORITY vaccines (Cholera, Dengue, HPV, Measles, Meningitis, Mpox, Pneumococcal, Rotavirus, RSV, Typhoid, Yellow Fever)
+  "vaccine__meningitis":    ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__yellow_fever":  ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__cholera":       ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__dengue":        ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__hpv":           ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__measles":       ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__pneumococcal":  ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__rotavirus":     ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__rsv":           ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__typhoid":       ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__polio":         ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__diphtheria":    ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__pertussis":     ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__tetanus":       ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__hib":           ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__rubella":       ["eum4all","maghp","wla","whopq_full"],
+  // MEDIUM PRIORITY vaccines (BCG, Ebola, Hepatitis A/B/E, Rabies, Varicella, Chikungunya)
+  "vaccine__ebola":         ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__hepatitis":     ["wla","whopq_full"],
+  "vaccine__hepatitis_a":   ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__hepatitis_e":   ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__rabies":        ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__varicella":     ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__chikungunya":   ["eum4all","maghp","wla","whopq_full"],
+  // LOW/POTENTIAL vaccines (Japanese encephalitis, Mpox, Influenza)
+  "vaccine__japanese_enceph":["eum4all","maghp","wla","whopq_full"],
+  "vaccine__mpox":          ["eum4all","maghp","wla","whopq_full"],
+  "vaccine__influenza":     ["eum4all","maghp","wla","whopq_full"],
+  // BCG vaccine entries
+  "bcg__meningitis":        ["eum4all","maghp","wla","whopq_full"],
+  "bcg__yellow_fever":      ["eum4all","maghp","wla","whopq_full"],
+  "bcg__cholera":           ["eum4all","maghp","wla","whopq_full"],
+  "bcg__dengue":            ["eum4all","maghp","wla","whopq_full"],
+  "bcg__mpox":              ["eum4all","maghp","wla","whopq_full"],
+  "generic__meningitis":    ["maghp","wla","whopq_full"],
+  "generic__yellow_fever":  ["maghp","wla","whopq_full"],
+  "generic__cholera":       ["maghp","wla","whopq_full"],
+  "generic__mpox":          ["maghp","wla"],
+  "originator__meningitis": ["eum4all","maghp","wla","whopq_full"],
+  "originator__yellow_fever": ["eum4all","maghp","wla","whopq_full"],
+  "originator__cholera": ["eum4all","maghp","wla","whopq_full"],
+  "originator__mpox": ["eum4all","maghp","wla","whopq_full"],
+  "biological__meningitis": ["eum4all","maghp","wla","whopq_full"],
+  "biological__yellow_fever":["eum4all","maghp","wla","whopq_full"],
+  "biological__cholera":    ["eum4all","maghp","wla","whopq_full"],
+  "biological__mpox":       ["eum4all","maghp","wla"],
+  "biosimilar__meningitis": ["maghp","wla","whopq_full"],
+  "biosimilar__yellow_fever":["maghp","wla","whopq_full"],
+  "biosimilar__cholera":    ["maghp","wla","whopq_full"],
+    "biosimilar__mpox":       ["maghp","wla","whopq_full"],
+  "generic__dengue":        ["maghp","wla","whopq_full"],
+  "generic__hpv":           ["maghp","wla","whopq_full"],
+  "generic__pneumococcal":  ["maghp","wla","whopq_full"],
+  "generic__rotavirus":     ["maghp","wla","whopq_full"],
+  "generic__rsv":           ["maghp","wla","whopq_full"],
+  "generic__typhoid":       ["maghp","wla","whopq_full"],
+  "generic__hepatitis_a":   ["maghp","wla","whopq_full"],
+  "generic__hepatitis_e":   ["maghp","wla","whopq_full"],
+  "generic__rabies":        ["maghp","wla","whopq_full"],
+  "generic__varicella":     ["maghp","wla","whopq_full"],
+  "generic__chikungunya":   ["maghp","wla","whopq_full"],
+  "generic__japanese_enceph":["maghp","wla","whopq_full"],
+  "originator__dengue": ["eum4all","maghp","wla","whopq_full"],
+  "originator__hpv": ["eum4all","maghp","wla","whopq_full"],
+  "originator__pneumococcal": ["eum4all","maghp","wla","whopq_full"],
+  "originator__rotavirus": ["eum4all","maghp","wla","whopq_full"],
+  "originator__rsv": ["eum4all","maghp","wla","whopq_full"],
+  "originator__typhoid": ["eum4all","maghp","wla","whopq_full"],
+  "originator__hepatitis_a": ["eum4all","maghp","wla","whopq_full"],
+  "originator__hepatitis_e": ["eum4all","maghp","wla","whopq_full"],
+  "originator__rabies": ["eum4all","maghp","wla","whopq_full"],
+  "originator__varicella": ["eum4all","maghp","wla","whopq_full"],
+  "originator__chikungunya": ["eum4all","maghp","wla","whopq_full"],
+  "originator__japanese_enceph": ["eum4all","maghp","wla","whopq_full"],
+  "biological__dengue":     ["eum4all","maghp","wla","whopq_full"],
+  "biological__hpv":        ["eum4all","maghp","wla","whopq_full"],
+  "biological__pneumococcal":["eum4all","maghp","wla","whopq_full"],
+  "biological__rotavirus":  ["eum4all","maghp","wla","whopq_full"],
+  "biological__rsv":        ["eum4all","maghp","wla","whopq_full"],
+  "biological__typhoid":    ["eum4all","maghp","wla","whopq_full"],
+  "biological__hepatitis_a":["eum4all","maghp","wla","whopq_full"],
+  "biological__hepatitis_e":["eum4all","maghp","wla","whopq_full"],
+  "biological__rabies":     ["eum4all","maghp","wla","whopq_full"],
+  "biological__varicella":  ["eum4all","maghp","wla","whopq_full"],
+  "biological__chikungunya":["eum4all","maghp","wla","whopq_full"],
+  "biological__japanese_enceph":["eum4all","maghp","wla","whopq_full"],
+  "biosimilar__dengue":     ["maghp","wla","whopq_full"],
+  "biosimilar__hpv":        ["maghp","wla","whopq_full"],
+  "biosimilar__pneumococcal":["maghp","wla","whopq_full"],
+  "biosimilar__rotavirus":  ["maghp","wla","whopq_full"],
+  "biosimilar__rsv":        ["maghp","wla","whopq_full"],
+  "biosimilar__typhoid":    ["maghp","wla","whopq_full"],
+  "biosimilar__hepatitis_a":["maghp","wla","whopq_full"],
+  "biosimilar__hepatitis_e":["maghp","wla","whopq_full"],
+  "biosimilar__rabies":     ["maghp","wla","whopq_full"],
+  "biosimilar__varicella":  ["maghp","wla","whopq_full"],
+  "biosimilar__chikungunya":["maghp","wla","whopq_full"],
+  "biosimilar__japanese_enceph":["maghp","wla","whopq_full"],
+  "ntd__meningitis":        ["eum4all","maghp","wla"],
+  "ntd__yellow_fever":      ["eum4all","maghp","wla"],
+  "ntd__cholera":           ["eum4all","maghp","wla"],
+  "ntd__mpox":              ["eum4all","maghp","wla"],
+  "arv__meningitis":        ["eum4all","maghp","wla"],
+  "arv__yellow_fever":      ["eum4all","maghp","wla"],
+  "arv__cholera":           ["eum4all","maghp","wla"],
+  "arv__mpox":              ["eum4all","maghp","wla"],
+  "insulin__meningitis":    ["eum4all","maghp","wla"],
+  "insulin__yellow_fever":  ["eum4all","maghp","wla"],
+  "insulin__cholera":       ["eum4all","maghp","wla"],
+  "insulin__mpox":          ["eum4all","maghp","wla"],
+  // Monoclonal antibodies - same pathways as cancer_bio
+  "mab__cancer":            ["eum4all","maghp","wla","whopq_full"],
+  "mab__hiv":               ["eum4all","maghp","wla","whopq_full"],
+  "mab__tb":                ["eum4all","maghp","wla","whopq_full"],
+  "mab__malaria":           ["eum4all","maghp","wla","whopq_full"],
+  "mab__hepatitis":         ["eum4all","maghp","wla","whopq_full"],
+  "mab__ntds":              ["eum4all","maghp","wla","whopq_full"],
+  "mab__maternal":          ["eum4all","maghp","wla","whopq_full"],
+  "mab__covid":             ["eum4all","maghp","wla","whopq_full"],
+  "mab__ebola":             ["eum4all","maghp","wla","whopq_full"],
+  "analgesics__meningitis": ["eum4all","maghp","wla"],
+  "analgesics__yellow_fever":["eum4all","maghp","wla"],
+  "analgesics__cholera":    ["eum4all","maghp","wla"],
+  "analgesics__mpox":       ["eum4all","maghp","wla"],
+  "cancer_bio__meningitis": ["eum4all","maghp","wla"],
+  "cancer_bio__yellow_fever":["eum4all","maghp","wla"],
+  "cancer_bio__cholera":    ["eum4all","maghp","wla"],
+  "cancer_bio__mpox":       ["eum4all","maghp","wla"],
+};
+
+var TLABELS = {
+  "medicines":"Medicines",
+  "vaccines":"Vaccines"
+};
+var DLABELS = {
+  "hiv":"HIV / AIDS",
+  "tb":"Tuberculosis",
+  "malaria":"Malaria",
+  "hepatitis":"Hepatitis B / C",
+  "hepatitis_a":"Hepatitis A",
+  "hepatitis_e":"Hepatitis E",
+  "ntd":"Neglected tropical diseases",
+  "maternal":"Maternal and reproductive health",
+  "covid":"COVID-19",
+  "apnoea":"Apnoea in preterm infants",
+  "bacterial_children":"Bacterial infections in children",
+  "cholera":"Cholera",
+  "cchf":"Crimean-Congo haemorrhagic fever",
+  "diabetes":"Diabetes",
+  "diarrhoeal":"Diarrhoeal disease",
+  "diphtheria":"Diphtheria",
+  "disease_x":"Disease X",
+  "tobacco":"Disorders caused by tobacco use",
+  "ebola":"Ebola virus disease",
+  "hib":"Haemophilus influenzae type B (Hib)",
+  "hpv":"Human papillomavirus (HPV)",
+  "influenza":"Influenza",
+  "lassa":"Lassa fever",
+  "marburg":"Marburg virus disease",
+  "measles":"Measles",
+  "meningitis":"Meningitis",
+  "mers_sars":"MERS-CoV and SARS",
+  "mpox":"Mpox",
+  "mdr_bacterial":"Multi-drug resistant bacterial infections",
+  "nipah":"Nipah and henipaviral diseases",
+  "cancer":"Cancer",
+  "pain":"Pain management",
+  "pertussis":"Pertussis",
+  "pneumococcal":"Pneumococcal disease",
+  "polio":"Polio",
+  "rsv":"Respiratory Syncytial Virus (RSV)",
+  "rift_valley":"Rift Valley fever",
+  "rotavirus":"Rotavirus",
+  "rubella":"Rubella",
+  "tetanus":"Tetanus",
+  "zika":"Zika",
+  "yellow_fever":"Yellow fever",
+  "dengue":"Dengue",
+  "japanese_enceph":"Japanese encephalitis",
+  "rabies":"Rabies",
+  "typhoid":"Typhoid",
+  "varicella":"Varicella",
+  "chikungunya":"Chikungunya"
+};
+
+// Acronym definitions for tooltips
+var ACRONYMS = {
+  "NMRA": "National Medicines Regulatory Authority",
+  "WHO": "World Health Organization",
+  "PQ": "Prequalification",
+  "WLA": "WHO Listed Authority",
+  "SRA": "Stringent Regulatory Authority",
+  "CRP": "Collaborative Review Process",
+  "ARV": "Antiretroviral",
+  "PEPFAR": "President's Emergency Plan for AIDS Relief",
+  "CTD": "Common Technical Document",
+  "EMA": "European Medicines Agency",
+  "FDA": "Food and Drug Administration",
+  "LMIC": "Low- and Middle-Income Country",
+  "EU": "European Union",
+  "MAGHP": "Marketing Authorisation for Global Health Products",
+  "GDUFA": "Generic Drug User Fee Amendments"
+};
+
+// Function to wrap acronyms with tooltip markup
+function addAcronymTooltips(text) {
+  var result = text;
+  for (var acronym in ACRONYMS) {
+    var definition = ACRONYMS[acronym];
+    // Match whole words only, case-sensitive, but NOT when inside parentheses
+    // Negative lookbehind: not preceded by (
+    // Negative lookahead: not followed by )
+    var regex = new RegExp('(?<!\\()\\b(' + acronym + ')\\b(?![^(]*\\))', 'g');
+    result = result.replace(regex, '<span class="acronym">$1<span class="tooltip">' + definition + '</span></span>');
+  }
+  return result;
+}
+
+// Combination vaccine notes for specific diseases
+var COMBO_VACCINE_NOTES = {
+  "measles": "✓ Also covers Measles-Rubella (MR) and Measles-Mumps-Rubella (MMR) combination vaccines",
+  "rubella": "✓ Also covers Measles-Rubella (MR) and Measles-Mumps-Rubella (MMR) combination vaccines",
+  "diphtheria": "✓ Also covers DT, Td, DTwP, DTaP, Hexavalent (DTwP-HepB-Hib-IPV), and Pentavalent combination vaccines",
+  "tetanus": "✓ Also covers DT, Td, DTwP, DTaP, Hexavalent (DTwP-HepB-Hib-IPV), and Pentavalent combination vaccines",
+  "pertussis": "✓ Also covers DTwP, DTaP, Hexavalent (DTwP-HepB-Hib-IPV), and Pentavalent combination vaccines",
+  "hib": "✓ Also covers Hexavalent (DTwP-HepB-Hib-IPV) and Pentavalent combination vaccines",
+  "polio": "✓ Covers multiple formulations: IPV (inactivated), bOPV, mOPV, tOPV, nOPV, and combination vaccines",
+  "meningitis": "✓ Covers ACWY and ACWYX conjugate vaccine formulations"
+};
+
+var NODE = {
+  product: {
+    name:"Product",
+    lbl:"Product",
+    bg:"#f3f4f6", stroke:"#1f2937",
+    tag:"Starting point", tagBg:"#e5e7eb", tagCol:"#1f2937",
+    desc:"The medicine or vaccine seeking regulatory approval. The pathways available depend on the medicine type and disease indication selected. From here, the product can proceed through one or more international reliance procedure, or directly to the target country National Medicines Regulatory Authority (NMRA).",
+    time:"--", dos:"--", legal:"--", fee:"--"
+  },
+  eum4all: {
+    url: "https://www.ema.europa.eu/system/files/documents/regulatory-procedural-guideline/pre-post-article-58-scientific-opinions-procedural-advice-users_v2_en.pdf",
+    urlText: "Official document ↗",
+    name:"EU-M4All",
+    lbl:"EU-M4All",
+    bg:"#bfdbfe", stroke:"#2563eb",
+    tag:"EMA", tagBg:"#93c5fd", tagCol:"#1e3a8a",
+    desc:"EU-M4All (formerly Article 58) is a specialised EMA procedure designed to facilitate access to medicines in low- and middle-income countries. The pathway integrates EMA's scientific review with WHO and national regulators' expertise in local epidemiology and disease patterns.<br><br>EMA evaluates the medicine and publishes a scientific opinion on its benefit-risk balance. This opinion is intended to support WHO prequalification and national registration in target countries. Since 2021, manufacturers can submit parallel applications for EU-M4All and EU marketing authorization. EU-M4All medicines have access to EMA's full regulatory toolkit, including scientific advice, PRIME designation eligibility, and accelerated review where applicable.<br><br>A positive EU-M4All opinion enables WHO Alternative Listing without additional assessment and can be used as the basis for WHO PQ Abridged Pathway under certain conditions (<a href='https://extranet.who.int/prequal/sites/default/files/document_files/Procedure%20to%20enable%20prequalification%20products%20approved%20by%20SRAs%20for%20use%20outside%20the%20SRA%20region-18%20March%202025_0.pdf' target='_blank' style='color: #2563eb; text-decoration: underline;'>as of March 2025</a>). National regulatory authorities have no mandated timeline for making registration decisions following a positive opinion. For manufacturers intending to market the product within the EU rather than for export alone, the EMA offers <a href='https://www.ema.europa.eu/en/documents/regulatory-procedural-guideline/public-guidance-parallel-application-eu-m4all-article-58-opinion-and-centralised-marketing-authorisation-procedure_en.pdf' target='_blank' style='color: #2563eb; text-decoration: underline;'>parallel assessment</a> of the centralised marketing authorisation and EU-M4All applications.<br><br>EU-M4All has no separate fee schedule, instead applying the same fees as the centralised marketing authorisation procedure, where the initial application fee depends on the legal basis of the application under the New Fee Regulation (EU) 2024/568.",
+    time:"210 days (Standard)<br>150 days (Accelerated)<br><span style='font-size: 0.85em; color: #666;'>(excluding clock stops)</span>", dos:"Full CTD dossier submitted to EMA",
+    legal:"EU Regulation 726/2004 (Article 58)", fee:"<a href='https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32024R0568' target='_blank' style='color: #2563eb; text-decoration: underline;'>€33,300-€865,200</a>"
+  },
+  maghp: {
+    url: "https://www.swissmedic.ch/dam/swissmedic/de/dokumente/stab/networking/maghp_procedure.pdf.download.pdf/maghp_procedure.pdf",
+    urlText: "Guidance document ↗",
+    name:"Swissmedic MAGHP",
+    lbl:"Swissmedic\nMAGHP",
+    bg:"#fed7aa", stroke:"#ea580c",
+    tag:"Swissmedic", tagBg:"#fdba74", tagCol:"#9a3412",
+    desc:"The Swissmedic Marketing Authorisation for Global Health Products makes the Swiss authorisation procedure accessible to regulatory authorities in LMICs and the WHO. It focuses on sub-Saharan Africa and diseases disproportionately affecting that region, though other countries may participate. NMRAs are invited to participate actively in the assessment. If approved, the procedure results in a Swiss marketing authorisation; alternatively, manufacturers may opt for export registration, allowing the product to be marketed only outside Switzerland.<br><br>An alternative MAGHP Procedure is also available. The MAGHP Light Procedure applies to all <a href='https://www.swissmedic.ch/dam/swissmedic/en/dokumente/zulassung/zl_hmv_iv/zl104_00_002d_wl_beschleunigtes_zlverfahren_hmv4_ab_010121.pdf.download.pdf/ZL104_00_002e_WL_Fast_track_authorisation_procedure.pdf' target='_blank' style='color: #ea580c; text-decoration: underline;'>fast-track</a> and <a href='https://www.swissmedic.ch/dam/swissmedic/en/dokumente/zulassung/zl_hmv_iv/zl109_00_001d_wl_befristete_zl_ham_hmv4_ab_010121.pdf.download.pdf/ZL109_00_001e_WL_Temporary_authorisation_for_human_medicinal_products.pdf' target='_blank' style='color: #ea580c; text-decoration: underline;'>temporary authorisation</a> applications. It facilitates one-directional exchange of documentation with participating NMRAs, but Swissmedic does not interact with the NMRAs during the assessment.<br><br>For the standard MAGHP procedure, participating NMRAs commit to making registration decisions within 90 days of receiving approval. No such timeframe applies to MAGHP Light. A positive MAGHP decision grants WHO Alternative Listing without further assessment. Since March 2025, it can also support the WHO PQ Abridged Pathway.<br><br>Swissmedic's MAGHP has no separate fee schedule, instead applying the same fees as the traditional marketing authorisation application according to the Swissmedic Fees Ordinance (FeeO-Swissmedic; SR 812.214.5).",
+    time:"330 days (<a href='https://www.swissmedic.ch/dam/swissmedic/en/dokumente/zulassung/zl_hmv_iv/zl000_00_014d_wlfristenzulassungsgesuche.pdf.download.pdf/zl000_00_014e_wltimelimitsforauthorizationapplications.pdf' target='_blank' style='color: #ea580c; text-decoration: underline;'>Standard</a>)<br>140 days (<a href='https://www.swissmedic.ch/dam/swissmedic/en/dokumente/zulassung/zl_hmv_iv/zl000_00_014d_wlfristenzulassungsgesuche.pdf.download.pdf/zl000_00_014e_wltimelimitsforauthorizationapplications.pdf' target='_blank' style='color: #ea580c; text-decoration: underline;'>Light</a>)<br><span style='font-size: 0.85em; color: #666;'>(agency time only)</span>", dos:"Full CTD dossier submitted to Swissmedic",
+    legal:"Swiss Therapeutic Products Act (HMG) / MAGHP framework", fee:"<a href='https://www.gmp-navigator.com/files/guidemgr/Swissmedic%20812.214.5.pdf' target='_blank' style='color: #ea580c; text-decoration: underline;'>CHF 30,000-80,000</a>"
+  },
+  fda_ta: {
+    url: "https://www.fda.gov/media/183851/download?attachment",
+    urlText: "Information for Industry ↗",
+    name:"FDA Tentative Approval",
+    lbl:"FDA Tentative\nApproval",
+    bg:"#a7f3d0", stroke:"#10b981",
+    tag:"FDA", tagBg:"#6ee7b7", tagCol:"#065f46",
+    desc:"The FDA issues tentative approvals to drugs that satisfy all necessary regulatory standards but face U.S. marketing delays because of patent protections or exclusivity periods tied to the original brand-name product. The President's Emergency Plan for AIDS Relief (PEPFAR) relies on the FDA's tentative approval process to guarantee access to high-quality, safe, and effective antiretrovirals (ARV) for procurement and deployment through its program.<br><br>An FDA tentative approval enables WHO Alternative Listing without additional assessment and can be used as the basis for WHO PQ Abridged Pathway (as of March 2025). National regulatory authorities have no mandated timeline for making registration decisions following a tentative approval.<br><br>FDA tentative approvals are submitted as standard Abbreviated New Drug Applications (ANDA) subject to GDUFA fees, which the FDA <a href='https://www.federalregister.gov/documents/2025/07/30/2025-14411/generic-drug-user-fee-rates-for-fiscal-year-2026' target='_blank' style='color: #10b981; text-decoration: underline;'>sets annually</a>.",
+    time:"10 months (Standard)<br>6 months (Priority)", dos:"505(b)(2) NDA or ANDA submitted to FDA",
+    legal:"Federal Food, Drug and Cosmetic Act s.505 / PEPFAR", fee:"US$358,247 application fee (FY26)",
+    eligible:"<a href='https://www.fda.gov/media/134222/download?attachment' target='_blank' style='color: #10b981; text-decoration: underline;'>ARVs needed for PEPFAR</a>"
+  },
+  wla: {
+    url: "https://www.who.int/publications/m/item/list-of-who-listed-authorities-wlas",
+    urlText: "List of WLAs ↗",
+    name:"WHO-Listed Authority",
+    lbl:"WHO-Listed\nAuthority",
+    bg:"#ddd6fe", stroke:"#7c3aed",
+    tag:"FDA/EMA etc", tagBg:"#c4b5fd", tagCol:"#4c1d95",
+    desc:"A WHO Listed Authority (WLA) is a national regulatory authority deemed by the WHO to comply with high international standards for medical product oversight, such as EMA, FDA, Health Canada, Australia's TGA, Japan's PMDA, or Swissmedic. This is not itself a bespoke reliance procedure, but is a prior approval status that makes a product eligible for WHO PQ Abridged Pathway, bypassing the need for full WHO PQ assessment.",
+    time:"Variable (existing approval)", dos:"Copy of WLA marketing authorisation + key CTD modules",
+    legal:"ICH guidelines + WHO reliance policy", fee:"Variable"
+  },
+  whopq_full: {
+    url: "https://extranet.who.int/prequal/",
+    name:"WHO PQ Full pathway",
+    lbl:"WHO PQ\nFull pathway",
+    bg:"#fef3c7", stroke:"#f59e0b",
+    tag:"WHO", tagBg:"#fde68a", tagCol:"#78350f",
+    desc:"A full World Health Organization (WHO) Prequalification assessment with no prior WHO Listed Authority (WLA) or reference approval. WHO conducts an independent scientific review of the complete dossier covering quality, safety and efficacy. This is the default route for products without any prior approval from an WLA or WHO-recognised reference process. Once approved, the product is included in the WHO's <a href='https://extranet.who.int/prequal/medicines/prequalified/finished-pharmaceutical-products' target='_blank' style='color: #f59e0b; text-decoration: underline;'>list</a> of prequalified medicines and gets a WHO Reference Number. WHO Prequalification is often a requirement for procurement agencies such as UNICEF.",
+    time:"200 days (<a href='https://extranet.who.int/prequal/faq/how-long-does-prequalification-finished-pharmaceutical-product-active-pharmaceutical-ingredient' target='_blank' style='color: #f59e0b; text-decoration: underline;'>medicines</a>)<br>270 days (<a href='https://extranet.who.int/prequal/faq/what-duration-and-cost-vaccines-prequalification' target='_blank' style='color: #f59e0b; text-decoration: underline;'>vaccines</a>)", dos:"Full CTD dossier (Modules 1-5)",
+    legal:"WHO PQ programme (TRS guidelines)", fee:"US$22,000-27,500 (<a href='https://extranet.who.int/prequal/medicines/prequalification-procedures-and-fees-fpps-apis-qcls' target='_blank' style='color: #f59e0b; text-decoration: underline;'>medicines</a>)<br>US$27,500-256,025 (<a href='https://extranet.who.int/prequal/vaccines/fees-prequalification' target='_blank' style='color: #f59e0b; text-decoration: underline;'>vaccines</a>)"
+  },
+  who_alt: {
+    url: "https://extranet.who.int/prequal/medicines/general-information-who-list-prequalified-medicinal-products",
+    name:"WHO Alternative Listing",
+    lbl:"WHO Alternative\nListing",
+    bg:"#fef3c7", stroke:"#f59e0b",
+    tag:"WHO", tagBg:"#fde68a", tagCol:"#78350f",
+    desc:"WHO Alternative Listing is granted without any further WHO assessment to products that hold a positive EU-M4All opinion, a Swissmedic MAGHP (export-only) approval, or FDA Tentative Approval. Products on the WHO Alternative Listing are eligible for the WHO Collaborative Review Process for products approved by WHO Listed Authorities (WLA CRP) to facilitate national registration.",
+    time:"No additional review required", dos:"Reference approval document only",
+    legal:"WHO Alternative Listing framework", fee:"N/A"
+  },
+  whopq_abr: {
+    name:"WHO PQ Abridged pathway",
+    lbl:"WHO PQ\nAbridged pathway",
+    bg:"#fef3c7", stroke:"#f59e0b",
+    tag:"WHO", tagBg:"#fde68a", tagCol:"#78350f",
+    desc:"A streamlined World Health Organization (WHO) Prequalification assessment for products that already hold a WHO Listed Authority (WLA) approval or - since March 2025 - a positive EU-M4All, MAGHP or FDA Tentative Approval. WHO reviews a reduced dossier. Products that achieve WHO PQ via this route are then eligible for the WHO Collaborative Review Process (CRP) for PQ products. Once approved, the product is included in the WHO's <a href='https://extranet.who.int/prequal/medicines/prequalified/finished-pharmaceutical-products' target='_blank' style='color: #f59e0b; text-decoration: underline;'>list</a> of prequalified medicines and gets a WHO Reference Number. WHO Prequalification is often a requirement for procurement agencies such as UNICEF.",
+    time:"1-2 months (<a href='https://extranet.who.int/prequal/faq/how-long-does-prequalification-finished-pharmaceutical-product-active-pharmaceutical-ingredient' target='_blank' style='color: #f59e0b; text-decoration: underline;'>medicines</a>)<br>90 days (<a href='https://extranet.who.int/prequal/faq/what-duration-and-cost-vaccines-prequalification' target='_blank' style='color: #f59e0b; text-decoration: underline;'>vaccines</a>)", dos:"Abridged dossier referencing prior WLA / reference approval",
+    legal:"WHO PQ programme - abridged procedure", feeWide:true, fee:"<div style='display:grid; grid-template-columns:1fr 1fr; gap:20px;'><div><a href='https://extranet.who.int/prequal/medicines/prequalification-procedures-and-fees-fpps-apis-qcls' target='_blank' style='color: #f59e0b; text-decoration: underline; font-weight: 500; font-size:13px;'>Medicines ↗</a><div style='font-size:11px; color:var(--ink2); line-height:1.8; margin-top:5px;'>US$6,600-11,000 registration<br>US$4,400-5,500 annual fees</div></div><div><a href='https://extranet.who.int/prequal/vaccines/fees-prequalification' target='_blank' style='color: #f59e0b; text-decoration: underline; font-weight: 500; font-size:13px;'>Vaccines ↗</a><div style='font-size:11px; color:var(--ink2); line-height:1.8; margin-top:5px;'>US$27,500-256,025 evaluation<br>US$2,750-5,500 screening<br>US$33,000 site inspection<br>US$5,280-275,000 annual maintenance</div></div></div>",
+    eligible:"<a href='https://extranet.who.int/prequal/medicines/fpps-apis-eligible-prequalification-eois' target='_blank' style='color: #f59e0b; text-decoration: underline;'>Medicines</a><br><a href='https://extranet.who.int/prequal/vaccines/vaccines-eligible-who-prequalification' target='_blank' style='color: #f59e0b; text-decoration: underline;'>Vaccines</a>"
+  },
+  crp_pq: {
+    url: "https://www.who.int/teams/regulation-prequalification/regulation-and-safety/facilitated-product-introduction/collaborative-registration-procedure/procedure-for-prequalified-med-vax",
+    name:"WHO Collaborative Review Process for prequalified products (PQ CRP)",
+    lbl:"WHO CRP for\nPQ products",
+    bg:"#fef9c3", stroke:"#eab308",
+    tag:"WHO", tagBg:"#fde68a", tagCol:"#854d0e",
+    desc:"The WHO Collaborative Review Process (CRP) for prequalified products enables accelerated national registration in participating African National Regulatory Authorities (NRAs). The NMRA accepts the WHO PQ assessment as the primary technical review, significantly reducing national registration timelines. Participating NMRAs commit to making registration decisions within 90 days. Available only to products that have achieved full WHO Prequalification including via the abridged route. Products can also proceed directly to the NMRA without using CRP.",
+    time:"3-6 months", dos:"WHO PQ certificate + simplified national dossier",
+    legal:"WHO CRP framework / national reliance policy", fee:"N/A"
+  },
+  crp_wla: {
+    url: "https://www.who.int/teams/regulation-prequalification/regulation-and-safety/facilitated-product-introduction/collaborative-registration-procedure/crp-for-medicines-and-vaccines-approved-by-the-stringent-regulatory-authorities",
+    name:"WHO Collaborative Review Process for products approved by WHO Listed Authorities (WLAs)",
+    lbl:"WHO CRP\nfor WLAs",
+    bg:"#fef9c3", stroke:"#eab308",
+    tag:"WHO", tagBg:"#fde68a", tagCol:"#854d0e",
+    desc:"The WHO Collaborative Review Process for products approved by WHO Listed Authorities (WLA)* enables National Medicines Regulatory Authorities (NMRAs) to accelerate registration by using assessments already conducted by trusted regulatory bodies. Participating NMRAs seek to issue registration decisions within 90 working days from receiving all relevant documents. This route is available to products on the WHO Alternative Listing: those with positive opinion via EU-M4All, Swissmedic MAGHP, or FDA's Tentative Approval. Products that have been prequalified by the WHO use the CRP for PQ products instead.<br><br>*<em>Why does the WHO website say \"The WHO Collaborative Review Process for products approved by Stringent Regulatory Authorities (SRA CRP)\"?</em><br>Stringent Regulatory Authorities (SRAs) is an outdated term, which the WHO started replacing with WHO Listed Authorities (WLAs), which is used throughout this website. However, the WHO is still in the process of transitioning its documents to replace SRA with WLA, including for this procedure.",
+    time:"3-6 months", dos:"WHO Alternative Listing certificate + simplified national dossier",
+    legal:"WHO CRP framework / national reliance policy", fee:"N/A"
+  },
+  nra: {
+    name:"Target country NMRA",
+    lbl:"Target country\nNMRA",
+    bg:"#f3f4f6", stroke:"#1f2937",
+    tag:"END GOAL", tagBg:"#e5e7eb", tagCol:"#1f2937",
+    desc:"The National Medicines Regulatory Authority (NMRA) of the target lower- or middle-income country. This is the final step in the registration process. Products can reach the NMRA either via reliance pathways for expedited registration, or directly.",
+    time:"Variable by country", dos:"National dossier (varies by NRA)",
+    legal:"National medicines legislation", fee:"Variable"
+  }
+};
+
+
+// Pathway selection and highlighting system
+var selectedPathway = null;
+
+// Define all possible pathways with their nodes and estimated timelines
+function getPathways(init, selectedCountry) {
+  var pathways = [];
+  var inPQ = !selectedCountry || CRP_PQ_COUNTRIES.indexOf(selectedCountry) >= 0;
+  var inSRA = !selectedCountry || CRP_SRA_COUNTRIES.indexOf(selectedCountry) >= 0;
+  
+  // Pathway 1: Product -> EU-M4All -> WHO Alternative Listing -> CRP WLA -> NMRA
+  if (init.indexOf("eum4all") >= 0 && inSRA) {
+    pathways.push({
+      id: "eum_alt_crpsra",
+      name: "Product → EU-M4All → WHO Alternative Listing → WHO CRP for WLAs → Target country NMRA",
+      nodes: ["product", "eum4all", "who_alt", "crp_wla", "nra"],
+      timeline: "~16-20 months",
+      breakdown: "EU-M4All Standard (210 days) + WHO Alt Listing (3-4 mo) + CRP WLA (3-6 mo) + NMRA decision (90 days)"
+    });
+  } else if (init.indexOf("eum4all") >= 0 && !inSRA) {
+    pathways.push({
+      id: "eum_alt_direct",
+      name: "Product → EU-M4All → WHO Alternative Listing → Target country NMRA",
+      nodes: ["product", "eum4all", "who_alt", "nra"],
+      breakdown: "EU-M4All Standard (210 days) + WHO Alt Listing (3-4 mo) + NMRA review (timeline varies)"
+    });
+  }
+  
+  // Pathway 2: Product -> EU-M4All -> WHO PQ Abridged -> CRP PQ -> NMRA
+  if (init.indexOf("eum4all") >= 0 && inPQ) {
+    pathways.push({
+      id: "eum_abr_crppq",
+      name: "Product → EU-M4All → WHO PQ Abridged Pathway → WHO CRP for PQ products → Target country NMRA",
+      nodes: ["product", "eum4all", "whopq_abr", "crp_pq", "nra"],
+      timeline: "~16-20 months",
+      breakdown: "EU-M4All Standard (210 days) + WHO PQ Abridged (1-3 mo) + CRP PQ (3-6 mo) + NMRA decision (90 days)"
+    });
+  } else if (init.indexOf("eum4all") >= 0 && !inPQ) {
+    pathways.push({
+      id: "eum_abr_direct",
+      name: "Product → EU-M4All → WHO PQ Abridged Pathway → Target country NMRA",
+      nodes: ["product", "eum4all", "whopq_abr", "nra"],
+      breakdown: "EU-M4All Standard (210 days) + WHO PQ Abridged (1-3 mo) + NMRA review (timeline varies)"
+    });
+  }
+  
+  // Pathway 3: Product -> Swissmedic MAGHP -> WHO Alternative Listing -> CRP WLA -> NMRA
+  if (init.indexOf("maghp") >= 0 && inSRA) {
+    pathways.push({
+      id: "maghp_alt_crpsra",
+      name: "Product → Swissmedic MAGHP → WHO Alternative Listing → WHO CRP for WLAs → Target country NMRA",
+      nodes: ["product", "maghp", "who_alt", "crp_wla", "nra"],
+      timeline: "~20-24 months",
+      breakdown: "Swissmedic MAGHP Standard (330 days) + WHO Alt Listing (3-4 mo) + CRP WLA (3-6 mo) + NMRA decision (90 days)"
+    });
+  } else if (init.indexOf("maghp") >= 0 && !inSRA) {
+    pathways.push({
+      id: "maghp_alt_direct",
+      name: "Product → Swissmedic MAGHP → WHO Alternative Listing → Target country NMRA",
+      nodes: ["product", "maghp", "who_alt", "nra"],
+      breakdown: "Swissmedic MAGHP Standard (330 days) + WHO Alt Listing (3-4 mo) + NMRA review (timeline varies)"
+    });
+  }
+  
+  // Pathway 4: Product -> Swissmedic MAGHP -> WHO PQ Abridged -> CRP PQ -> NMRA
+  if (init.indexOf("maghp") >= 0 && inPQ) {
+    pathways.push({
+      id: "maghp_abr_crppq",
+      name: "Product → Swissmedic MAGHP → WHO PQ Abridged Pathway → WHO CRP for PQ products → Target country NMRA",
+      nodes: ["product", "maghp", "whopq_abr", "crp_pq", "nra"],
+      timeline: "~20-24 months",
+      breakdown: "Swissmedic MAGHP Standard (330 days) + WHO PQ Abridged (1-3 mo) + CRP PQ (3-6 mo) + NMRA decision (90 days)"
+    });
+  } else if (init.indexOf("maghp") >= 0 && !inPQ) {
+    pathways.push({
+      id: "maghp_abr_direct",
+      name: "Product → Swissmedic MAGHP → WHO PQ Abridged Pathway → Target country NMRA",
+      nodes: ["product", "maghp", "whopq_abr", "nra"],
+      breakdown: "Swissmedic MAGHP Standard (330 days) + WHO PQ Abridged (1-3 mo) + NMRA review (timeline varies)"
+    });
+  }
+  
+  // Pathway 5: Product -> FDA TA -> WHO Alternative Listing -> CRP WLA -> NMRA
+  if (init.indexOf("fda_ta") >= 0 && inSRA) {
+    pathways.push({
+      id: "fda_alt_crpsra",
+      name: "Product → FDA Tentative Approval → WHO Alternative Listing → WHO CRP for WLAs → Target country NMRA",
+      nodes: ["product", "fda_ta", "who_alt", "crp_wla", "nra"],
+      timeline: "~15-22 months",
+      breakdown: "FDA TA (6-9 mo) + WHO Alt Listing (3-4 mo) + CRP WLA (3-6 mo) + NMRA decision (90 days)"
+    });
+  } else if (init.indexOf("fda_ta") >= 0 && !inSRA) {
+    pathways.push({
+      id: "fda_alt_direct",
+      name: "Product → FDA Tentative Approval → WHO Alternative Listing → Target country NMRA",
+      nodes: ["product", "fda_ta", "who_alt", "nra"],
+      breakdown: "FDA TA (6-9 mo) + WHO Alt Listing (3-4 mo) + NMRA review (timeline varies)"
+    });
+  }
+  
+  // Pathway 6: Product -> FDA TA -> WHO PQ Abridged -> CRP PQ -> NMRA
+  if (init.indexOf("fda_ta") >= 0 && inPQ) {
+    pathways.push({
+      id: "fda_abr_crppq",
+      name: "Product → FDA Tentative Approval → WHO PQ Abridged Pathway → WHO CRP for PQ products → Target country NMRA",
+      nodes: ["product", "fda_ta", "whopq_abr", "crp_pq", "nra"],
+      timeline: "~15-22 months",
+      breakdown: "FDA TA (6-9 mo) + WHO PQ Abridged (1-3 mo) + CRP PQ (3-6 mo) + NMRA decision (90 days)"
+    });
+  } else if (init.indexOf("fda_ta") >= 0 && !inPQ) {
+    pathways.push({
+      id: "fda_abr_direct",
+      name: "Product → FDA Tentative Approval → WHO PQ Abridged Pathway → Target country NMRA",
+      nodes: ["product", "fda_ta", "whopq_abr", "nra"],
+      breakdown: "FDA TA (6-9 mo) + WHO PQ Abridged (1-3 mo) + NMRA review (timeline varies)"
+    });
+  }
+  
+  // NEW Pathway: Product -> EU-M4All -> Target country NMRA (direct, no WHO step)
+  if (init.indexOf("eum4all") >= 0) {
+    pathways.push({
+      id: "eum4all_direct_nmra",
+      name: "Product → EU-M4All → Target country NMRA",
+      nodes: ["product", "eum4all", "nra"],
+      breakdown: "EU-M4All Standard (210 days) + NMRA decision (timeline varies)"
+    });
+  }
+  
+  // NEW Pathway: Product -> Swissmedic MAGHP -> Target country NMRA (direct, no WHO step)
+  if (init.indexOf("maghp") >= 0) {
+    pathways.push({
+      id: "maghp_direct_nmra",
+      name: "Product → Swissmedic MAGHP → Target country NMRA",
+      nodes: ["product", "maghp", "nra"],
+      timeline: "~14 months",
+      breakdown: "Swissmedic MAGHP Standard (330 days) + NMRA decision (90 days)"
+    });
+  }
+  
+  // NEW Pathway: Product -> FDA TA -> Target country NMRA (direct, no WHO step)
+  if (init.indexOf("fda_ta") >= 0) {
+    pathways.push({
+      id: "fda_ta_direct_nmra",
+      name: "Product → FDA Tentative Approval → Target country NMRA",
+      nodes: ["product", "fda_ta", "nra"],
+      breakdown: "FDA Tentative Approval (6-9 mo) + NMRA decision (timeline varies)"
+    });
+  }
+  
+  // Pathway 7: Product -> Direct to NMRA
+  pathways.push({
+    id: "direct_nmra",
+    name: "Product → Target country NMRA",
+    nodes: ["product", "nra"],
+    breakdown: "Full NMRA review (timeline varies by country)"
+  });
+  
+  // Pathway 8: Product -> WHO PQ Full -> CRP PQ -> NMRA
+  if (init.indexOf("whopq_full") >= 0 && inPQ) {
+    pathways.push({
+      id: "whopq_full_crppq",
+      name: "Product → WHO PQ Full Pathway → WHO CRP for PQ products → Target country NMRA",
+      nodes: ["product", "whopq_full", "crp_pq", "nra"],
+      timeline: "~13-18 months",
+      breakdown: "WHO PQ Full (7-9 mo) + CRP PQ (3-6 mo) + NMRA decision (90 days)"
+    });
+  } else if (init.indexOf("whopq_full") >= 0 && !inPQ) {
+    pathways.push({
+      id: "whopq_full_direct",
+      name: "Product → WHO PQ Full Pathway → Target country NMRA",
+      nodes: ["product", "whopq_full", "nra"],
+      breakdown: "WHO PQ Full (7-9 mo) + NMRA review (timeline varies)"
+    });
+  }
+  
+  // Pathway 9: Product -> SRA -> WHO PQ Abridged -> CRP PQ -> NMRA
+  if (init.indexOf("wla") >= 0 && inPQ) {
+    pathways.push({
+      id: "sra_abr_crppq",
+      name: "Product → WLA → WHO PQ Abridged Pathway → WHO CRP for PQ products → Target country NMRA",
+      nodes: ["product", "wla", "whopq_abr", "crp_pq", "nra"],
+      timeline: "~21-31 months",
+      breakdown: "WLA approval (12-18 mo) + WHO PQ Abridged (1-3 mo) + CRP PQ (3-6 mo) + NMRA decision (90 days)"
+    });
+  } else if (init.indexOf("wla") >= 0 && !inPQ) {
+    pathways.push({
+      id: "sra_abr_direct",
+      name: "Product → WLA → WHO PQ Abridged Pathway → Target country NMRA",
+      nodes: ["product", "wla", "whopq_abr", "nra"],
+      breakdown: "WLA approval (12-18 mo) + WHO PQ Abridged (1-3 mo) + NMRA review (timeline varies)"
+    });
+  }
+  
+  return pathways;
+}
+
+function selectPathway(pathwayId) {
+  selectedPathway = pathwayId;
+  render();
+}
+
+function clearPathwaySelection() {
+  selectedPathway = null;
+  render();
+}
+
+
+function buildSVG(init) {
+  // LANE-BASED LAYOUT: Each pathway gets its own vertical lane to avoid overlaps
+  // Canvas: much wider to accommodate all lanes side-by-side
+  var W = 1200, BW = 120, BH = 54, PAD = 30;
+  var RGAP = 76, LANE_W = 140; // Each lane is 140px wide
+  
+  var hasEUM   = init.indexOf("eum4all")   >= 0;
+  var hasMAGHP = init.indexOf("maghp")     >= 0;
+  var hasFDA   = init.indexOf("fda_ta")    >= 0;
+  var hasSRA   = init.indexOf("wla")       >= 0;
+  var hasPQF   = init.indexOf("whopq_full")>= 0;
+  var hasAlt   = hasEUM || hasMAGHP || hasFDA;
+  var hasAbr   = hasSRA || hasEUM || hasMAGHP || hasFDA;
+  
+  // Check if selected country participates in CRPs
+  var selectedCountry = document.getElementById("sel-country").value;
+  // Check if selected country participates in CRPs
+  var selectedCountry = document.getElementById("sel-country").value;
+  var countryInPQ = !selectedCountry || CRP_PQ_COUNTRIES.indexOf(selectedCountry) >= 0;
+  var countryInSRA = !selectedCountry || CRP_SRA_COUNTRIES.indexOf(selectedCountry) >= 0;
+  
+  // Track which CRP nodes should be visually disabled
+  var crpSraDisabled = false;
+  var crpPqDisabled = false;
+  
+  // Row Y positions
+  var y0 = PAD;           // Product
+  var y1 = y0 + BH + RGAP; // Initial pathways
+  var y2 = y1 + BH + RGAP; // WHO intermediate (alt listing / abridged)
+  var y3 = y2 + BH + RGAP; // CRP layer
+  var y4 = y3 + BH + RGAP; // NRA
+  
+  var nodes = {};
+  
+  // Product: centred at top
+  nodes["product"] = { x: (W - BW) / 2, y: y0, w: BW, h: BH };
+  
+  // Calculate how many lanes we need and assign x positions
+  // Lanes (left to right): FDA, EU-M4All, MAGHP, SRA, WHO PQ Full, NRA-direct
+  var laneX = PAD;
+  var laneAssignments = {}; // node_id -> x position
+  
+  if (hasFDA) {
+    laneAssignments["fda_ta"] = laneX;
+    laneX += LANE_W;
+  }
+  if (hasEUM) {
+    laneAssignments["eum4all"] = laneX;
+    laneX += LANE_W;
+  }
+  if (hasMAGHP) {
+    laneAssignments["maghp"] = laneX;
+    laneX += LANE_W;
+  }
+  if (hasSRA) {
+    laneAssignments["wla"] = laneX;
+    laneX += LANE_W;
+  }
+  if (hasPQF) {
+    laneAssignments["whopq_full"] = laneX;
+    laneX += LANE_W;
+  }
+  
+  // NMRA gets its own lane on far right
+  laneAssignments["nra_direct"] = W - PAD - BW;
+  
+  // Place row 1 nodes in their lanes
+  if (hasFDA)   nodes["fda_ta"]     = { x: laneAssignments["fda_ta"], y: y1, w: BW, h: BH };
+  if (hasEUM)   nodes["eum4all"]    = { x: laneAssignments["eum4all"], y: y1, w: BW, h: BH };
+  if (hasMAGHP) nodes["maghp"]      = { x: laneAssignments["maghp"], y: y1, w: BW, h: BH };
+  if (hasSRA)   nodes["wla"]        = { x: laneAssignments["wla"], y: y1, w: BW, h: BH };
+  if (hasPQF)   nodes["whopq_full"] = { x: laneAssignments["whopq_full"], y: y1, w: BW, h: BH };
+  
+  // WHO Alternative Listing sits in the leftmost "alt pathway" lane (FDA/EUM/MAGHP)
+  if (hasAlt) {
+    var altX = hasFDA ? laneAssignments["fda_ta"] : (hasEUM ? laneAssignments["eum4all"] : laneAssignments["maghp"]);
+    nodes["who_alt"] = { x: altX, y: y2, w: BW, h: BH };
+  }
+  
+  // WHO PQ Abridged sits in a middle position between the abridged-eligible nodes
+  if (hasAbr) {
+    var abrX;
+    if (hasSRA) abrX = laneAssignments["wla"];
+    else if (hasMAGHP) abrX = laneAssignments["maghp"];
+    else if (hasEUM) abrX = laneAssignments["eum4all"];
+    else if (hasFDA) abrX = laneAssignments["fda_ta"];
+    nodes["whopq_abr"] = { x: abrX, y: y2, w: BW, h: BH };
+  }
+  
+  // CRP nodes: position between their source nodes
+  if (hasAlt) {
+    var crpSraX = nodes["who_alt"].x;
+    nodes["crp_wla"] = { x: crpSraX, y: y3, w: BW, h: BH };
+    crpSraDisabled = !countryInSRA;
+  }
+  if (hasAbr || hasPQF) {
+    // Position CRP for PQ products to align with its primary source
+    // Priority: if both abridged and full exist, position between them
+    var crpPqX;
+    if (nodes["whopq_abr"] && nodes["whopq_full"]) {
+      // Both exist: position CRP between them
+      crpPqX = (nodes["whopq_abr"].x + nodes["whopq_full"].x) / 2;
+    } else if (nodes["whopq_abr"]) {
+      crpPqX = nodes["whopq_abr"].x;
+    } else if (nodes["whopq_full"]) {
+      crpPqX = nodes["whopq_full"].x;
+    } else {
+      crpPqX = W / 2 - BW / 2;
+    }
+    nodes["crp_pq"] = { x: crpPqX, y: y3, w: BW, h: BH };
+    crpPqDisabled = !countryInPQ;
+  }
+  
+  // NRA: centred in bottom row
+  nodes["nra"] = { x: (W - BW) / 2, y: y4, w: BW, h: BH };
+  
+  var totalH = y4 + BH + PAD;
+  
+  function cx(id) { return nodes[id].x + nodes[id].w / 2; }
+  function cy(id) { return nodes[id].y + nodes[id].h / 2; }
+  function bot(id) { return nodes[id].y + nodes[id].h; }
+  function top(id) { return nodes[id].y; }
+  function right(id) { return nodes[id].x + nodes[id].w; }
+  function left(id) { return nodes[id].x; }
+  
+  var linesHTML = "";
+  
+  // Track which connections are being made for pathway highlighting
+  var connections = [];
+  
+  function line(x1, y1, x2, y2, customYmid, fromId, toId) {
+    connections.push({from: fromId, to: toId});
+    var ymid = customYmid !== undefined ? customYmid : (y1 + y2) / 2;
+    var d;
+    if (Math.abs(x1 - x2) < 4) {
+      d = "M" + x1 + " " + y1 + " L" + x2 + " " + y2;
+    } else {
+      d = "M" + x1 + " " + y1 + " L" + x1 + " " + ymid + " L" + x2 + " " + ymid + " L" + x2 + " " + y2;
+    }
+    
+    // Determine if this connection is in the selected pathway
+    var inPath = true;
+    if (selectedPathway && fromId && toId) {
+      var pathways = getPathways(init, selectedCountry);
+      var pathway = pathways.find(function(p) { return p.id === selectedPathway; });
+      if (pathway) {
+        var nodes = pathway.nodes;
+        var fromIdx = nodes.indexOf(fromId);
+        var toIdx = nodes.indexOf(toId);
+        // Line is in path if both nodes are in pathway AND they're consecutive
+        inPath = fromIdx >= 0 && toIdx >= 0 && Math.abs(toIdx - fromIdx) === 1;
+      } else {
+        // Pathway not found, show all lines
+        inPath = true;
+      }
+    }
+    
+    var opacity = inPath ? 1 : 0.1;
+    linesHTML += "<path d=\"" + d + "\" stroke=\"#1a1a2e\" stroke-width=\"" + (inPath ? 2.5 : 1.5) + "\" fill=\"none\" marker-end=\"url(#arrb)\" opacity=\"" + opacity + "\"/>";
+  }
+  
+  // DRAW ALL CONNECTIONS
+  var prodCX = cx("product"), prodBot = bot("product");
+  
+  // Product -> Row 1 initial pathways (straight down to each lane)
+  if (hasFDA)   line(prodCX, prodBot, cx("fda_ta"), top("fda_ta"), undefined, "product", "fda_ta");
+  if (hasEUM)   line(prodCX, prodBot, cx("eum4all"), top("eum4all"), undefined, "product", "eum4all");
+  if (hasMAGHP) line(prodCX, prodBot, cx("maghp"), top("maghp"), undefined, "product", "maghp");
+  if (hasSRA)   line(prodCX, prodBot, cx("wla"), top("wla"), undefined, "product", "wla");
+  if (hasPQF)   line(prodCX, prodBot, cx("whopq_full"), top("whopq_full"), undefined, "product", "whopq_full");
+  
+  // Product -> NMRA direct
+  line(prodCX, prodBot, cx("nra"), top("nra"), undefined, "product", "nra");
+  
+  // NEW: Direct connections from Row 1 to NMRA (bypassing WHO nodes)
+  if (hasFDA)   line(cx("fda_ta"), bot("fda_ta"), cx("nra"), top("nra"), undefined, "fda_ta", "nra");
+  if (hasEUM)   line(cx("eum4all"), bot("eum4all"), cx("nra"), top("nra"), undefined, "eum4all", "nra");
+  if (hasMAGHP) line(cx("maghp"), bot("maghp"), cx("nra"), top("nra"), undefined, "maghp", "nra");
+  
+  // Row 1 -> Row 2 connections
+  if (hasFDA && nodes["who_alt"]) line(cx("fda_ta"), bot("fda_ta"), cx("who_alt"), top("who_alt"), undefined, "fda_ta", "who_alt");
+  if (hasFDA && nodes["whopq_abr"]) line(cx("fda_ta"), bot("fda_ta"), cx("whopq_abr"), top("whopq_abr"), undefined, "fda_ta", "whopq_abr");
+  
+  if (hasEUM && nodes["who_alt"]) line(cx("eum4all"), bot("eum4all"), cx("who_alt"), top("who_alt"), undefined, "eum4all", "who_alt");
+  if (hasEUM && nodes["whopq_abr"]) line(cx("eum4all"), bot("eum4all"), cx("whopq_abr"), top("whopq_abr"), undefined, "eum4all", "whopq_abr");
+  
+  if (hasMAGHP && nodes["who_alt"]) line(cx("maghp"), bot("maghp"), cx("who_alt"), top("who_alt"), undefined, "maghp", "who_alt");
+  if (hasMAGHP && nodes["whopq_abr"]) line(cx("maghp"), bot("maghp"), cx("whopq_abr"), top("whopq_abr"), undefined, "maghp", "whopq_abr");
+  
+  if (hasSRA && nodes["whopq_abr"]) line(cx("wla"), bot("wla"), cx("whopq_abr"), top("whopq_abr"), undefined, "wla", "whopq_abr");
+  
+  // WHO PQ Full goes ONLY to CRP PQ (not to abridged) - handled separately below
+  
+  // WHO PQ Full connection
+  var sharedElbow = undefined;
+  if (hasPQF && nodes["whopq_abr"] && nodes["crp_pq"]) {
+    // Both exist: calculate separate elbow heights to avoid overlap
+    sharedElbow = bot("whopq_full") + (top("crp_pq") - bot("whopq_full")) * 0.35;
+    var abrElbow = bot("whopq_abr") + (top("crp_pq") - bot("whopq_abr")) * 0.5;
+  }
+  if (hasPQF && nodes["crp_pq"]) {
+    line(cx("whopq_full"), bot("whopq_full"), cx("crp_pq"), top("crp_pq"), sharedElbow, "whopq_full", "crp_pq");
+    // Add bypass if disabled
+    if (crpPqDisabled) {
+      line(cx("whopq_full"), bot("whopq_full"), cx("nra"), top("nra"), undefined, "whopq_full", "nra");
+    }
+  }
+  
+  // Row 2 -> Row 3 connections
+  if (nodes["who_alt"] && nodes["crp_wla"]) {
+    line(cx("who_alt"), bot("who_alt"), cx("crp_wla"), top("crp_wla"), undefined, "who_alt", "crp_wla");
+  }
+  if (nodes["whopq_abr"] && nodes["crp_pq"]) {
+    var useElbow = (hasPQF && nodes["whopq_full"]) ? abrElbow : sharedElbow;
+    line(cx("whopq_abr"), bot("whopq_abr"), cx("crp_pq"), top("crp_pq"), useElbow, "whopq_abr", "crp_pq");
+  }
+  
+  // Add bypass lines when CRP is disabled (row 2 directly to NMRA)
+  if (nodes["who_alt"] && crpSraDisabled) {
+    line(cx("who_alt"), bot("who_alt"), cx("nra"), top("nra"), undefined, "who_alt", "nra");
+  }
+  if (nodes["whopq_abr"] && crpPqDisabled) {
+    line(cx("whopq_abr"), bot("whopq_abr"), cx("nra"), top("nra"), undefined, "whopq_abr", "nra");
+  }
+  
+  // Row 3 -> NMRA connections
+  if (nodes["crp_wla"]) line(cx("crp_wla"), bot("crp_wla"), cx("nra"), top("nra"), undefined, "crp_wla", "nra");
+  if (nodes["crp_pq"]) line(cx("crp_pq"), bot("crp_pq"), cx("nra"), top("nra"), undefined, "crp_pq", "nra");
+  
+  // DRAW NODES
+  var nodesHTML = "";
+  
+  // Determine which nodes are in the selected pathway
+  var selectedNodes = [];
+  if (selectedPathway) {
+    var pathways = getPathways(init, selectedCountry);
+    var pathway = pathways.find(function(p) { return p.id === selectedPathway; });
+    if (pathway) selectedNodes = pathway.nodes;
+  }
+  
+  Object.keys(nodes).forEach(function(id) {
+    var n = nodes[id];
+    var inf = NODE[id];
+    var isNRA = id === "nra";
+    var isSRA = id === "wla";
+    
+    // Check if this node is in selected pathway
+    var isInPathway = selectedNodes.length === 0 || selectedNodes.indexOf(id) >= 0;
+    var nodeOpacity = isInPathway ? 1 : 0.15;
+    
+    // Dynamic labels for product and NMRA nodes
+    var displayLabel = inf.lbl;
+    if (id === "product") {
+      // Show medicine type and disease instead of generic "Product"
+      var typeLabel = TLABELS[document.getElementById("sel-type").value] || "Product";
+      var diseaseLabel = DLABELS[document.getElementById("sel-disease").value] || "";
+      displayLabel = typeLabel + (diseaseLabel ? "\n" + diseaseLabel : "");
+    } else if (id === "nra") {
+      // Show country name if selected
+      var countryVal = document.getElementById("sel-country").value;
+      if (countryVal) {
+        var opt = document.querySelector("#sel-country option[value=\"" + countryVal + "\"]");
+        if (opt) displayLabel = opt.textContent + "\nNRA";
+      }
+    }
+    var parts = displayLabel.split("\n");
+    var lineH = 15;
+    var totalLH = parts.length * lineH;
+    var startY = n.y + n.h / 2 - totalLH / 2 + 10;
+    // Check if this node will be disabled before creating labels
+    var isDisabledNode = (id === "crp_wla" && crpSraDisabled) || (id === "crp_pq" && crpPqDisabled);
+    
+    // Create tooltip text for acronyms in the label
+    var tooltipText = "";
+    var labelText = displayLabel.replace(/\n/g, " "); // Replace line breaks with spaces for matching
+    
+    // Check each acronym
+    for (var acronym in ACRONYMS) {
+      // Use word boundary matching to catch whole acronyms
+      var regex = new RegExp('\\b' + acronym + '\\b');
+      if (regex.test(labelText)) {
+        if (tooltipText) tooltipText += "; ";
+        tooltipText += acronym + " = " + ACRONYMS[acronym];
+      }
+    }
+    
+    // Also add specific explanations for common node types
+    if (id === "nra") {
+      tooltipText = "National Medicines Regulatory Authority of the target country";
+    } else if (id === "whopq_full") {
+      if (!tooltipText) tooltipText = "";
+      else tooltipText += "; ";
+      tooltipText += "World Health Organization Prequalification";
+    } else if (id === "whopq_abr") {
+      if (!tooltipText) tooltipText = "";
+      else tooltipText += "; ";
+      tooltipText += "World Health Organization Prequalification Abridged pathway";
+    }
+    
+    var lblHTML = parts.map(function(t, i) {
+      return "<text x=\"" + (n.x + n.w/2) + "\" y=\"" + (startY + i*lineH) + "\" text-anchor=\"middle\" class=\"node-lbl\" style=\"" + (isDisabledNode ? "opacity: 0.4;" : "") + "\">" + t + "</text>";
+    }).join("");
+    
+    var subHTML = "";
+    
+    // Check if this CRP node is disabled
+    var isDisabled = (id === "crp_wla" && crpSraDisabled) || (id === "crp_pq" && crpPqDisabled);
+    
+    // Add strikethrough and warning icon for disabled CRP nodes
+    var disabledOverlay = "";
+    if (isDisabled) {
+      // Diagonal strikethrough line
+      disabledOverlay = "<line x1=\"" + (n.x + 8) + "\" y1=\"" + (n.y + 8) + "\" x2=\"" + (n.x + n.w - 8) + "\" y2=\"" + (n.y + n.h - 8) + "\" stroke=\"#dc2626\" stroke-width=\"3\" opacity=\"0.9\"/>"
+        + "<circle cx=\"" + (n.x + n.w - 14) + "\" cy=\"" + (n.y + 14) + "\" r=\"11\" fill=\"#dc2626\"/>"
+        + "<text x=\"" + (n.x + n.w - 14) + "\" y=\"" + (n.y + 19) + "\" text-anchor=\"middle\" style=\"font-size: 15px; font-weight: bold; fill: white;\">⚠</text>";
+    }
+    
+    
+    // Add info icon for MAGHP when country is outside Sub-Saharan Africa
+    var maghpInfoIcon = "";
+    if (id === "maghp" && selectedCountry && !SUBSAHARAN_AFRICA_COUNTRIES.includes(selectedCountry)) {
+      maghpInfoIcon = "<circle cx=\"" + (n.x + 18) + "\" cy=\"" + (n.y + n.h - 18) + "\" r=\"10\" fill=\"#f59e0b\"/>"
+        + "<text x=\"" + (n.x + 18) + "\" y=\"" + (n.y + n.h - 13) + "\" text-anchor=\"middle\" style=\"font-size: 14px; font-weight: bold; fill: white;\">ℹ</text>";
+    }
+    
+    nodesHTML += "<g onclick=\"toggleCard('" + id + "')\" style=\"cursor:pointer; opacity:" + nodeOpacity + ";\">"
+      + (tooltipText ? "<title>" + tooltipText + "</title>" : "")
+      + "<rect x=\"" + n.x + "\" y=\"" + n.y + "\" width=\"" + n.w + "\" height=\"" + n.h + "\" rx=\"7\" fill=\"" + inf.bg + "\" stroke=\"" + inf.stroke + "\" stroke-width=\"" + (isNRA ? 2 : 1.2) + "\" style=\"" + (isDisabled ? "opacity: 0.5;" : "") + "\"/>"
+      + lblHTML + subHTML + disabledOverlay + maghpInfoIcon
+      + "</g>";
+  });
+  
+  var svg = "<svg width=\"100%\" viewBox=\"0 0 " + W + " " + totalH + "\" xmlns=\"http://www.w3.org/2000/svg\">"
+    + "<defs>"
+    + "<marker id=\"arrb\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\"><path d=\"M2 1L8 5L2 9\" fill=\"none\" stroke=\"#1a1a2e\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></marker>"
+    + "</defs>"
+    + linesHTML + nodesHTML
+    + "</svg>";
+  
+  var row1ids = [];
+  if (hasFDA) row1ids.push("fda_ta");
+  if (hasEUM) row1ids.push("eum4all");
+  if (hasMAGHP) row1ids.push("maghp");
+  if (hasSRA) row1ids.push("wla");
+  if (hasPQF) row1ids.push("whopq_full");
+  
+  var row2ids = [];
+  if (hasAlt) row2ids.push("who_alt");
+  if (hasAbr) row2ids.push("whopq_abr");
+  
+  var row3ids = [];
+  if (hasAlt) row3ids.push("crp_wla");
+  if (hasAbr || hasPQF) row3ids.push("crp_pq");
+  
+  var ordered = ["product"].concat(row1ids).concat(row2ids).concat(row3ids).concat(["nra"]);
+  var seen = {};
+  ordered = ordered.filter(function(id) {
+    if (seen[id]) return false;
+    seen[id] = true;
+    return true;
+  });
+  return { svg: svg, ordered: ordered };
+}
+
+function toggleCard(id) {
+  var el = document.getElementById("card-" + id);
+  if (el) el.classList.toggle("open");
+}
+
+function resetAll() {
+  document.getElementById("sel-type").value = "";
+  document.getElementById("sel-disease").value = "";
+  document.getElementById("sel-country").value = "";
+  render();
+}
+
+function render() {
+  var t  = document.getElementById("sel-type").value;
+  var d  = document.getElementById("sel-disease").value;
+  var c  = document.getElementById("sel-country").value;
+  var out = document.getElementById("output");
+
+  if (!t || !d) {
+    out.innerHTML = "<div class=\"empty-state\"><div class=\"empty-title\">Select a medicine type and disease</div><div class=\"empty-sub\">The regulatory pathway flowchart will appear here.</div></div>";
+    return;
+  }
+
+  var key  = t + "__" + d;
+  var init = ELIG[key] || [];
+
+  if (!init.length) {
+    out.innerHTML = "<div class=\"empty-state\"><div class=\"empty-title\">No pathways found for this combination</div><div class=\"empty-sub\">" + TLABELS[t] + " for " + DLABELS[d] + " does not currently match WHO PQ, EU-M4All, MAGHP or FDA TA eligibility. A full national dossier review may still be possible - consult the target NMRA directly.</div></div>";
+    return;
+  }
+
+  var res = buildSVG(init);
+
+  // Legend
+  var legendDefs = [
+    { stroke:"#1f2937", bg:"#e5e7eb", lbl:"Product (starting point)" },
+    { stroke:"#f59e0b", bg:"#fef3c7", lbl:"WHO-based reliance pathway" },
+    { stroke:"#2563eb", bg:"#bfdbfe", lbl:"EMA-based reliance pathway",   check:"eum4all" },
+    { stroke:"#ea580c", bg:"#fed7aa", lbl:"Swissmedic-based reliance pathway", check:"maghp" },
+    { stroke:"#10b981", bg:"#a7f3d0", lbl:"FDA-based reliance pathway", check:"fda_ta" },
+    { stroke:"#7c3aed", bg:"#ddd6fe", lbl:"Approval by a WHO-Listed Authority", check:"wla" },
+    { stroke:"#1f2937", bg:"#f3f4f6", lbl:"Target country NMRA (end goal)" }
+  ];
+  var legHTML = "<div class=\"legend\">";
+  legendDefs.forEach(function(l) {
+    if (l.check && init.indexOf(l.check) < 0) return;
+    legHTML += "<div class=\"legend-item\"><div class=\"legend-swatch\" style=\"background:" + l.bg + ";border:1px solid " + l.stroke + "\"></div>" + l.lbl + "</div>";
+  });
+  
+  legHTML += "</div>";
+
+  // Country label
+  var cLabel = "";
+  if (c) {
+    var opt = document.querySelector("#sel-country option[value=\"" + c + "\"]");
+    if (opt) cLabel = " - " + opt.textContent;
+  }
+
+  // Detail cards
+  var cardsHTML = "<div class=\"cards\">";
+  res.ordered.forEach(function(id) {
+    var inf = NODE[id];
+    if (!inf) return;
+    
+    // Add combination vaccine note for WHO PQ pathways if applicable
+    var cardDesc = addAcronymTooltips(inf.desc);
+    if ((id === "whopq_full" || id === "whopq_abr") && COMBO_VACCINE_NOTES[d]) {
+      cardDesc += "<div style='margin-top: 12px; padding: 10px; background: #fef3c7; border-left: 3px solid #f59e0b; border-radius: 4px; font-size: 12px; color: #78350f;'>" + COMBO_VACCINE_NOTES[d] + "</div>";
+    }
+    
+    cardsHTML += "<div class=\"card\" id=\"card-" + id + "\">"
+      + "<div class=\"card-hd\" onclick=\"toggleCard('" + id + "')\">"
+      + "<div class=\"card-dot\" style=\"background:" + inf.stroke + "\"></div>"
+      + "<span class=\"card-name\">" + inf.name + "</span>"
+      + "<span class=\"card-tag\" style=\"background:" + inf.tagBg + ";color:" + inf.tagCol + "\">" + inf.tag + "</span>"
+      + "<span class=\"card-chev\">&#9662;</span>"
+      + "</div>"
+      + "<div class=\"card-bd\">"
+      + "<p class=\"card-desc\">" + cardDesc + "</p>"
+      + "<div class=\"card-grid\">"
+      + (inf.time !== "--" ? "<div class=\"card-cell\"><div class=\"cell-lbl\">Estimated timeline</div><div class=\"cell-val\">" + inf.time + "</div></div>" : "")
+      + (inf.eligible ? "<div class=\"card-cell\"><div class=\"cell-lbl\">Eligible products</div><div class=\"cell-val\">" + inf.eligible + "</div></div>" : "")
+      + (inf.url ? "<div class=\"card-cell\"><div class=\"cell-lbl\">More info</div><div class=\"cell-val\"><a href=\"" + inf.url + "\" target=\"_blank\" style=\"color: " + inf.stroke + "; text-decoration: none; font-weight: 500;\">" + (inf.urlText || "Official website ↗") + "</a></div></div>" : "")
+      + (inf.fee !== "--" ? "<div class=\"card-cell\"" + (inf.feeWide ? " style=\"grid-column:1/-1\"" : "") + "><div class=\"cell-lbl\">Assessment fee</div><div class=\"cell-val\">" + inf.fee + "</div></div>" : "")
+      + "</div></div></div>";
+  });
+  cardsHTML += "</div>";
+
+  var crpNote = "";
+  if (c && COUNTRIES[c]) {
+    var inPQ = CRP_PQ_COUNTRIES.indexOf(c) >= 0;
+    var inSRA = CRP_SRA_COUNTRIES.indexOf(c) >= 0;
+    if (!inPQ && !inSRA) {
+      crpNote = "<div style=\"font-size: 11px; color: #d97706; margin-top: 4px; font-weight: 500;\">⚠️ (As of February 2026) " + COUNTRIES[c] + " does not participate in WHO CRP for WLAs or WHO CRP for PQ products -- its NMRA cannot access WHO's prequalification assessment or inspection reports during its review</div>";
+    } else if (!inPQ) {
+      crpNote = "<div style=\"font-size: 11px; color: #d97706; margin-top: 4px; font-weight: 500;\">⚠️ (As of February 2026) " + COUNTRIES[c] + " does not participate in WHO CRP for PQ products -- its NMRA cannot access WHO's prequalification assessment or inspection reports during its review</div>";
+    } else if (!inSRA) {
+      crpNote = "<div style=\"font-size: 11px; color: #d97706; margin-top: 4px; font-weight: 500;\">⚠️ (As of February 2026) " + COUNTRIES[c] + " does not participate in WHO CRP for WLAs -- its NMRA cannot access WHO's prequalification assessment or inspection reports during its review</div>";
+    }
+  }
+  
+  // MAGHP regional focus note for non-Sub-Saharan Africa
+  var maghpNote = "";
+  if (c && COUNTRIES[c] && init.indexOf("maghp") >= 0) {
+    var inSSA = SUBSAHARAN_AFRICA_COUNTRIES.indexOf(c) >= 0;
+    if (!inSSA) {
+      maghpNote = "<div style=\"font-size: 11px; color: #92400e; margin-top: 8px; padding: 10px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 4px; line-height: 1.5;\"><span style=\"font-size: 14px; margin-right: 6px;\">ℹ️</span><strong>Regional Focus:</strong> MAGHP focuses on sub-Saharan Africa and on medicines for diseases that disproportionately affect this region, although other countries or regions may also be considered.</div>";
+    }
+  }
+  // Generate pathway selector if pathways exist
+  var availablePathways = getPathways(init, c);
+  var pathwayHTML = "";
+  if (availablePathways.length > 0) {
+    pathwayHTML = "<div style=\"padding: 16px; background: var(--paper2); border-radius: 8px; border: 1px solid var(--border); position: sticky; top: 20px;\">"
+      + "<div style=\"font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink3); margin-bottom: 12px;\">Available Pathways (" + availablePathways.length + ")</div>";
+    
+    if (selectedPathway) {
+      var selected = availablePathways.find(function(p) { return p.id === selectedPathway; });
+      if (selected) {
+        pathwayHTML += "<div style=\"background: white; padding: 12px; border-radius: 6px; border: 2px solid var(--accent2);\">"
+          + "<div style=\"display: flex; justify-content: space-between; align-items: center;\">"
+          + "<div><strong style=\"color: var(--accent2); font-size: 13px;\">" + selected.name + "</strong>"
+          + "<div style=\"font-size: 11px; color: var(--ink3); margin-top: 2px;\">" + selected.breakdown + "</div></div>"
+          + (selected.timeline ? "<div style=\"font-size: 18px; font-weight: 600; color: var(--accent2);\">" + selected.timeline + "</div>" : "")
+          + "</div>"
+          + "<button onclick=\"clearPathwaySelection()\" style=\"margin-top: 8px; padding: 4px 12px; font-size: 11px; background: var(--paper3); border: 1px solid var(--border); border-radius: 4px; cursor: pointer;\">Show all pathways</button>"
+          + "</div>";
+      }
+    } else {
+      pathwayHTML += "<div style=\"display: grid; gap: 6px;\">";
+      availablePathways.forEach(function(p, index) {
+        pathwayHTML += "<div onclick=\"selectPathway('" + p.id + "')\" style=\"background: white; padding: 10px; border-radius: 6px; cursor: pointer; border: 1px solid var(--border); transition: all 0.2s; margin-bottom: 8px;\" onmouseover=\"this.style.borderColor='var(--accent2)'; this.style.background='var(--paper2)';\" onmouseout=\"this.style.borderColor='var(--border)'; this.style.background='white';\">"
+          + "<div style=\"font-size: 11px; font-weight: 500; line-height: 1.4;\"><span style=\"display: inline-block; width: 20px; color: var(--ink3);\">" + (index + 1) + ".</span>" + p.name + "</div>"
+          + "</div>";
+      });
+      pathwayHTML += "</div>";
+    }
+    pathwayHTML += "</div>";
+  }
+  
+  out.innerHTML = "<div class=\"flow-label\">Pathway map for</div>"
+    + "<div class=\"flow-title\">" + TLABELS[t] + " - " + DLABELS[d] + cLabel + "</div>"
+    + crpNote
+    + maghpNote
+    + legHTML
+    + "<div style=\"display: flex; gap: 20px; align-items: flex-start;\">"
+    + "<div class=\"flowchart\" style=\"flex: 1; min-width: 0;\"><div class=\"flow-svg-wrap\">" + res.svg + "</div></div>"
+    + (pathwayHTML ? "<div style=\"flex: 0 0 320px;\">" + pathwayHTML + "</div>" : "")
+    + "</div>"
+    + "<div style=\"border-top: 1px solid var(--border); padding: 16px 0; margin: 20px 0; background: var(--paper2);\"><div style=\"font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 10px;\">Acronym Reference</div><div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 6px 16px; font-size: 11px; line-height: 1.7; color: var(--ink2);\"><div><strong style=\"font-weight: 500; color: var(--ink);\">WHO</strong> = World Health Organization</div><div><strong style=\"font-weight: 500; color: var(--ink);\">EMA</strong> = European Medicines Agency</div><div><strong style=\"font-weight: 500; color: var(--ink);\">FDA</strong> = Food and Drug Administration</div><div><strong style=\"font-weight: 500; color: var(--ink);\">WLA</strong> = WHO Listed Authority</div><div><strong style=\"font-weight: 500; color: var(--ink);\">NMRA</strong> = National Medicines Regulatory Authority</div><div><strong style=\"font-weight: 500; color: var(--ink);\">CRP</strong> = Collaborative Registration Procedure</div><div><strong style=\"font-weight: 500; color: var(--ink);\">PQ</strong> = Prequalification</div><div><strong style=\"font-weight: 500; color: var(--ink);\">MAGHP</strong> = Marketing Authorization for Global Health Products</div><div><strong style=\"font-weight: 500; color: var(--ink);\">EU-M4All</strong> = EU-Medicines for all</div></div></div>"
+    + "<p class=\"click-hint\">Click any node or expand a card below for details</p>"
+    + cardsHTML;
+}
+
+render();
+</script>
+
+
+</div>
+
+</body>
+</html>
