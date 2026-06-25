@@ -1277,7 +1277,7 @@ function getPathways(init, selectedCountry) {
       id: "eum_alt_crpsra",
       name: "Product → EU-M4All → WHO Alternative Listing → WHO CRP for WLAs → Target country NMRA",
       nodes: ["product", "eum4all", "who_alt", "crp_wla", "nra"],
-      breakdown: "EU-M4All Standard (210 days) + WHO Alt Listing (3-4 mo) + CRP WLA (3-6 mo) + NMRA decision"
+      breakdown: "EU-M4All Standard (210 days) + WHO Alt Listing (3-4 mo) + CRP WLA (3-6 mo) + NMRA decision (varies)"
     });
   } else if (init.indexOf("eum4all") >= 0 && !inSRA) {
     pathways.push({
@@ -1294,7 +1294,7 @@ function getPathways(init, selectedCountry) {
       id: "eum_abr_crppq",
       name: "Product → EU-M4All → WHO PQ Abridged Pathway → WHO CRP for PQ products → Target country NMRA",
       nodes: ["product", "eum4all", "whopq_abr", "crp_pq", "nra"],
-      breakdown: "EU-M4All Standard (210 days) + WHO PQ Abridged (1-3 mo) + CRP PQ (3-6 mo) + NMRA decision"
+      breakdown: "EU-M4All Standard (210 days) + WHO PQ Abridged (1-3 mo) + CRP PQ (3-6 mo) + NMRA decision (varies)"
     });
   } else if (init.indexOf("eum4all") >= 0 && !inPQ) {
     pathways.push({
@@ -1311,7 +1311,7 @@ function getPathways(init, selectedCountry) {
       id: "maghp_alt_crpsra",
       name: "Product → Swissmedic MAGHP → WHO Alternative Listing → WHO CRP for WLAs → Target country NMRA",
       nodes: ["product", "maghp", "who_alt", "crp_wla", "nra"],
-      breakdown: "Swissmedic MAGHP Standard (330 days) + WHO Alt Listing (3-4 mo) + CRP WLA (3-6 mo) + NMRA decision"
+      breakdown: "Swissmedic MAGHP Standard (330 days) + WHO Alt Listing (3-4 mo) + CRP WLA (3-6 mo) + NMRA decision (varies)"
     });
   } else if (init.indexOf("maghp") >= 0 && !inSRA) {
     pathways.push({
@@ -1328,7 +1328,7 @@ function getPathways(init, selectedCountry) {
       id: "maghp_abr_crppq",
       name: "Product → Swissmedic MAGHP → WHO PQ Abridged Pathway → WHO CRP for PQ products → Target country NMRA",
       nodes: ["product", "maghp", "whopq_abr", "crp_pq", "nra"],
-      breakdown: "Swissmedic MAGHP Standard (330 days) + WHO PQ Abridged (1-3 mo) + CRP PQ (3-6 mo) + NMRA decision"
+      breakdown: "Swissmedic MAGHP Standard (330 days) + WHO PQ Abridged (1-3 mo) + CRP PQ (3-6 mo) + NMRA decision (varies)"
     });
   } else if (init.indexOf("maghp") >= 0 && !inPQ) {
     pathways.push({
@@ -1345,7 +1345,7 @@ function getPathways(init, selectedCountry) {
       id: "fda_alt_crpsra",
       name: "Product → FDA Tentative Approval → WHO Alternative Listing → WHO CRP for WLAs → Target country NMRA",
       nodes: ["product", "fda_ta", "who_alt", "crp_wla", "nra"],
-      breakdown: "FDA TA (6-9 mo) + WHO Alt Listing (3-4 mo) + CRP WLA (3-6 mo) + NMRA decision"
+      breakdown: "FDA TA (6-9 mo) + WHO Alt Listing (3-4 mo) + CRP WLA (3-6 mo) + NMRA decision (varies)"
     });
   } else if (init.indexOf("fda_ta") >= 0 && !inSRA) {
     pathways.push({
@@ -1362,7 +1362,7 @@ function getPathways(init, selectedCountry) {
       id: "fda_abr_crppq",
       name: "Product → FDA Tentative Approval → WHO PQ Abridged Pathway → WHO CRP for PQ products → Target country NMRA",
       nodes: ["product", "fda_ta", "whopq_abr", "crp_pq", "nra"],
-      breakdown: "FDA TA (6-9 mo) + WHO PQ Abridged (1-3 mo) + CRP PQ (3-6 mo) + NMRA decision"
+      breakdown: "FDA TA (6-9 mo) + WHO PQ Abridged (1-3 mo) + CRP PQ (3-6 mo) + NMRA decision (varies)"
     });
   } else if (init.indexOf("fda_ta") >= 0 && !inPQ) {
     pathways.push({
@@ -1389,7 +1389,7 @@ function getPathways(init, selectedCountry) {
       id: "maghp_direct_nmra",
       name: "Product → Swissmedic MAGHP → Target country NMRA",
       nodes: ["product", "maghp", "nra"],
-      breakdown: "Swissmedic MAGHP Standard (330 days) + NMRA decision"
+      breakdown: "Swissmedic MAGHP Standard (330 days) + NMRA decision (varies)"
     });
   }
   
@@ -1417,7 +1417,7 @@ function getPathways(init, selectedCountry) {
       id: "whopq_full_crppq",
       name: "Product → WHO PQ Full Pathway → WHO CRP for PQ products → Target country NMRA",
       nodes: ["product", "whopq_full", "crp_pq", "nra"],
-      breakdown: "WHO PQ Full (7-9 mo) + CRP PQ (3-6 mo) + NMRA decision"
+      breakdown: "WHO PQ Full (7-9 mo) + CRP PQ (3-6 mo) + NMRA decision (varies)"
     });
   } else if (init.indexOf("whopq_full") >= 0 && !inPQ) {
     pathways.push({
@@ -1434,7 +1434,7 @@ function getPathways(init, selectedCountry) {
       id: "sra_abr_crppq",
       name: "Product → WLA → WHO PQ Abridged Pathway → WHO CRP for PQ products → Target country NMRA",
       nodes: ["product", "wla", "whopq_abr", "crp_pq", "nra"],
-      breakdown: "WLA approval (12-18 mo) + WHO PQ Abridged (1-3 mo) + CRP PQ (3-6 mo) + NMRA decision"
+      breakdown: "WLA approval (12-18 mo) + WHO PQ Abridged (1-3 mo) + CRP PQ (3-6 mo) + NMRA decision (varies)"
     });
   } else if (init.indexOf("wla") >= 0 && !inPQ) {
     pathways.push({
