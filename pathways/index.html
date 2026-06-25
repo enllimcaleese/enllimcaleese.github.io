@@ -40,7 +40,7 @@ select:focus { outline: none; border-color: var(--accent2); }
 .main { padding: 28px 36px; flex: 1 0 auto; }
 
 .about-footer { border-top: 2px solid var(--border); background: var(--paper2); padding: 28px 36px 36px; }
-.about-label { font-family: "DM Mono", monospace; font-size: 9px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 12px; }
+.about-label { font-family: "DM Mono", monospace; font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 12px; }
 .about-text { font-size: 14px; font-weight: 300; line-height: 1.7; color: var(--ink2); }
 .about-text p { margin-bottom: 12px; }
 .about-text p:last-child { margin-bottom: 0; }
@@ -49,7 +49,7 @@ select:focus { outline: none; border-color: var(--accent2); }
 .empty-title { font-family: "DM Serif Display", serif; font-size: 22px; color: var(--ink2); margin-bottom: 8px; font-weight: 400; }
 .empty-sub { font-size: 14px; color: var(--ink3); font-weight: 300; max-width: 400px; margin: 0 auto; line-height: 1.6; }
 
-.flow-label { font-family: "DM Mono", monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 4px; }
+.flow-label { font-family: "DM Mono", monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 4px; }
 .flow-title { font-family: "DM Serif Display", serif; font-size: 20px; font-weight: 400; color: var(--ink); margin-bottom: 18px; }
 
 .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
@@ -64,9 +64,9 @@ select:focus { outline: none; border-color: var(--accent2); }
 
 .node-lbl { font-family: "DM Sans", sans-serif; font-size: 12px; font-weight: 600; fill: #1f2937; }
 .node-sub { font-family: "DM Sans", sans-serif; font-size: 9px; fill: #9a9ab0; }
-.since { font-family: "DM Mono", monospace; font-size: 9px; }
+.since { font-family: "DM Mono", monospace; font-size: 11px; }
 
-.click-hint { font-family: "DM Mono", monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); margin: 14px 0 8px; }
+.click-hint { font-family: "DM Mono", monospace; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); margin: 14px 0 8px; }
 
 .cards { display: flex; flex-direction: column; gap: 10px; }
 .card { background: var(--paper); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; cursor: pointer; transition: border-color .15s, box-shadow .15s; }
@@ -75,7 +75,7 @@ select:focus { outline: none; border-color: var(--accent2); }
 .card-hd { display: flex; align-items: center; gap: 12px; padding: 13px 16px; }
 .card-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 .card-name { font-family: "DM Serif Display", serif; font-size: 16px; font-weight: 400; flex: 1; }
-.card-tag { font-family: "DM Mono", monospace; font-size: 9px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; white-space: nowrap; }
+.card-tag { font-family: "DM Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; white-space: nowrap; }
 .card-chev { font-size: 12px; color: var(--ink3); transition: transform .2s; flex-shrink: 0; }
 .card.open .card-chev { transform: rotate(180deg); }
 .card-bd { display: none; padding: 0 16px 16px; border-top: 1px solid var(--border); }
@@ -83,7 +83,7 @@ select:focus { outline: none; border-color: var(--accent2); }
 .card-desc { font-size: 14px; font-weight: 300; line-height: 1.7; color: var(--ink2); margin: 14px 0 14px; }
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
 .card-cell { background: var(--paper2); border-radius: 3px; padding: 9px 11px; }
-.cell-lbl { font-family: "DM Mono", monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 4px; }
+.cell-lbl { font-family: "DM Mono", monospace; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 4px; }
 .cell-val { font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.4; }
 
 @media (max-width: 600px) {
@@ -1981,7 +1981,7 @@ function render() {
     + "<div class=\"flowchart\" style=\"flex: 1; min-width: 0;\"><div class=\"flow-svg-wrap\">" + res.svg + "</div></div>"
     + (pathwayHTML ? "<div class=\"pathway-aside\">" + pathwayHTML + "</div>" : "")
     + "</div>"
-    + "<div style=\"border-top: 1px solid var(--border); padding: 16px 0; margin: 20px 0; background: var(--paper2);\"><div style=\"font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 10px;\">Acronym Reference</div><div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 6px 16px; font-size: 12px; line-height: 1.7; color: var(--ink2);\"><div><strong style=\"font-weight: 500; color: var(--ink);\">WHO</strong> = World Health Organization</div><div><strong style=\"font-weight: 500; color: var(--ink);\">EMA</strong> = European Medicines Agency</div><div><strong style=\"font-weight: 500; color: var(--ink);\">FDA</strong> = Food and Drug Administration</div><div><strong style=\"font-weight: 500; color: var(--ink);\">WLA</strong> = WHO Listed Authority</div><div><strong style=\"font-weight: 500; color: var(--ink);\">NMRA</strong> = National Medicines Regulatory Authority</div><div><strong style=\"font-weight: 500; color: var(--ink);\">CRP</strong> = Collaborative Registration Procedure</div><div><strong style=\"font-weight: 500; color: var(--ink);\">PQ</strong> = Prequalification</div><div><strong style=\"font-weight: 500; color: var(--ink);\">MAGHP</strong> = Marketing Authorization for Global Health Products</div><div><strong style=\"font-weight: 500; color: var(--ink);\">EU-M4All</strong> = EU-Medicines for all</div></div></div>"
+    + "<div style=\"border-top: 1px solid var(--border); padding: 16px 0; margin: 20px 0; background: var(--paper2);\"><div style=\"font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 10px;\">Acronym Reference</div><div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 6px 16px; font-size: 12px; line-height: 1.7; color: var(--ink2);\"><div><strong style=\"font-weight: 500; color: var(--ink);\">WHO</strong> = World Health Organization</div><div><strong style=\"font-weight: 500; color: var(--ink);\">EMA</strong> = European Medicines Agency</div><div><strong style=\"font-weight: 500; color: var(--ink);\">FDA</strong> = Food and Drug Administration</div><div><strong style=\"font-weight: 500; color: var(--ink);\">WLA</strong> = WHO Listed Authority</div><div><strong style=\"font-weight: 500; color: var(--ink);\">NMRA</strong> = National Medicines Regulatory Authority</div><div><strong style=\"font-weight: 500; color: var(--ink);\">CRP</strong> = Collaborative Registration Procedure</div><div><strong style=\"font-weight: 500; color: var(--ink);\">PQ</strong> = Prequalification</div><div><strong style=\"font-weight: 500; color: var(--ink);\">MAGHP</strong> = Marketing Authorization for Global Health Products</div><div><strong style=\"font-weight: 500; color: var(--ink);\">EU-M4All</strong> = EU-Medicines for all</div></div></div>"
     + "<p class=\"click-hint\">Click any node or expand a card below for details</p>"
     + cardsHTML;
 }
