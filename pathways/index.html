@@ -16,6 +16,11 @@
   --border: rgba(45,55,72,0.1);
 }
 body { font-family: "DM Sans", sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; }
+/* Scale the whole page up on desktop for legibility; dividing min-height by the
+   same factor keeps the sticky footer flush to the viewport bottom (no gap). */
+@media (min-width: 601px) {
+  body { --zoom: 1.2; zoom: var(--zoom); min-height: calc(100vh / var(--zoom)); }
+}
 
 .header { border-bottom: 3px solid var(--accent); padding: 28px 36px 20px; position: relative; background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%); }
 .header::after { content: ""; position: absolute; bottom: 3px; left: 36px; right: 36px; height: 1px; background: var(--ink); opacity: .2; }
