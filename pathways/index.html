@@ -15,7 +15,7 @@
   --accent: #e53e3e; --accent2: #3182ce;
   --border: rgba(45,55,72,0.1);
 }
-body { font-family: "DM Sans", sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; }
+body { font-family: "DM Sans", sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; }
 
 .header { border-bottom: 3px solid var(--accent); padding: 28px 36px 20px; position: relative; background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%); }
 .header::after { content: ""; position: absolute; bottom: 3px; left: 36px; right: 36px; height: 1px; background: var(--ink); opacity: .2; }
@@ -32,7 +32,7 @@ select:focus { outline: none; border-color: var(--accent2); }
 .reset-btn { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink3); background: none; border: 1px solid var(--border); border-radius: 3px; padding: 8px 14px; cursor: pointer; transition: all .15s; white-space: nowrap; align-self: flex-end; }
 .reset-btn:hover { color: var(--accent); border-color: var(--accent); }
 
-.main { padding: 28px 36px; }
+.main { padding: 28px 36px; flex: 1 0 auto; }
 
 .about-footer { border-top: 2px solid var(--border); background: var(--paper2); padding: 28px 36px 36px; }
 .about-label { font-family: "DM Mono", monospace; font-size: 9px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 12px; }
@@ -1984,15 +1984,11 @@ function render() {
 render();
 </script>
 
-
-</div>
-
 <footer class="about-footer">
   <div class="about-label">About</div>
   <div class="about-text">
-    <p>Before a medicine or vaccine can be sold in a country, that country's national regulator has to authorise it. Many regulators in lower- and middle-income countries have limited staff and resources, which can slow approvals and delay patients' access to new medicines.</p>
-    <p>Reliance procedures offer a faster route. Rather than repeating the whole assessment, a national regulator can build on work already done by a trusted reference authority.</p>
-    <p>Pick a medicine type and disease above to see the reliance pathways available to your product.</p>
+    <p>Before a medicine or vaccine can be sold in a country, that country's national regulator has to authorise it. Many regulators in lower- and middle-income countries (LMICs) have limited staff and resources, which can slow approvals and delay patients' access to new medicines. Reliance procedures offer a faster route. Rather than repeating the whole assessment, a national regulator can build on work already done by a trusted reference authority.</p>
+    <p>This interactive tool helps you navigate regulatory reliance pathways available for priority medicines and vaccines intended for LMICs. It visualises all international reliance pathways available for a given medicine or vaccine, helping you identify the optimal route to approval by a National Medicines Regulatory Authority (NMRA) in your target LMIC.</p>
   </div>
 </footer>
 
