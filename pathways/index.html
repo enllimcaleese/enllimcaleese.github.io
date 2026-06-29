@@ -34,6 +34,11 @@ h1 em { font-style: italic; color: #3182ce; font-weight: 500; }
 .filter-label { font-family: "DM Mono", monospace; font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); }
 select { font-family: "DM Sans", sans-serif; font-size: 14px; color: var(--ink); background: var(--paper); border: 1px solid var(--border); border-radius: 3px; padding: 8px 28px 8px 10px; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%231a1a2e' opacity='.4'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; cursor: pointer; width: 100%; }
 select:focus { outline: none; border-color: var(--accent2); }
+.seg-toggle { display: flex; width: 100%; border: 1px solid var(--border); border-radius: 3px; overflow: hidden; background: var(--paper2); }
+.seg-btn { flex: 1; font-family: "DM Sans", sans-serif; font-size: 14px; font-weight: 500; color: var(--ink); background: transparent; border: none; padding: 8px 10px; cursor: pointer; transition: background .12s, color .12s; }
+.seg-btn + .seg-btn { border-left: 1px solid var(--border); }
+.seg-btn:not(.on):hover { background: var(--paper3); }
+.seg-btn.on { background: var(--accent2); color: #ffffff; }
 .reset-btn { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink3); background: none; border: 1px solid var(--border); border-radius: 3px; padding: 8px 14px; cursor: pointer; transition: all .15s; white-space: nowrap; align-self: flex-end; }
 .reset-btn:hover { color: var(--accent); border-color: var(--accent); }
 
@@ -150,11 +155,11 @@ select:focus { outline: none; border-color: var(--accent2); }
 <div class="filters">
   <div class="filter-group">
     <span class="filter-label">Medicine type</span>
-    <select id="sel-type" onchange="render()">
-      <option value="">Select medicine type...</option>
-      <option value="medicines">Medicines</option>
-      <option value="vaccines">Vaccines</option>
-    </select>
+    <input type="hidden" id="sel-type" value="">
+    <div class="seg-toggle" role="group" aria-label="Medicine type">
+      <button type="button" class="seg-btn" data-v="medicines" onclick="setType('medicines')">Medicines</button>
+      <button type="button" class="seg-btn" data-v="vaccines" onclick="setType('vaccines')">Vaccines</button>
+    </div>
   </div>
   <div class="filter-group">
     <span class="filter-label">Disease / indication</span>
@@ -1838,10 +1843,26 @@ function toggleCard(id) {
   if (el) el.classList.toggle("open");
 }
 
+function setType(val) {
+  var input = document.getElementById("sel-type");
+  input.value = (input.value === val) ? "" : val;  // click active segment again to deselect
+  syncTypeButtons();
+  render();
+}
+
+function syncTypeButtons() {
+  var val = document.getElementById("sel-type").value;
+  var btns = document.querySelectorAll(".seg-btn");
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].classList.toggle("on", val !== "" && btns[i].getAttribute("data-v") === val);
+  }
+}
+
 function resetAll() {
   document.getElementById("sel-type").value = "";
   document.getElementById("sel-disease").value = "";
   document.getElementById("sel-country").value = "";
+  syncTypeButtons();
   render();
 }
 
