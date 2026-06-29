@@ -505,8 +505,9 @@ var ELIG = {
   "medicines__pain":               ["eum4all","maghp","wla","whopq_full"],
   "medicines__tb":                 ["eum4all","maghp","wla","whopq_full"],
   "medicines__tobacco":            ["eum4all","maghp","wla","whopq_full"],
-  // VACCINES (broad) - WHO PQ vaccine priority list (whopq_full + wla); EU-M4all
-  // covers EPI / WHO-priority-disease / stockpile vaccines; MAGHP broad.
+  // VACCINES (broad) - WHO PQ vaccine priority list (whopq_full + wla); MAGHP broad.
+  // EU-M4all applied to every WHO PQ vaccine (PQ eligibility taken to confer
+  // EU-M4all eligibility) plus the 8 WHO priority-disease vaccines not on the PQ list.
   // EU-M4all + WHO PQ eligible:
   "vaccines__cholera":       ["eum4all","maghp","wla","whopq_full"],
   "vaccines__covid":         ["eum4all","maghp","wla","whopq_full"],
@@ -527,17 +528,17 @@ var ELIG = {
   "vaccines__tb":            ["eum4all","maghp","wla","whopq_full"],
   "vaccines__tetanus":       ["eum4all","maghp","wla","whopq_full"],
   "vaccines__yellow_fever":  ["eum4all","maghp","wla","whopq_full"],
-  // WHO PQ only (not on EU-M4all vaccine lists):
-  "vaccines__chikungunya":   ["maghp","wla","whopq_full"],
-  "vaccines__dengue":        ["maghp","wla","whopq_full"],
-  "vaccines__hepatitis_a":   ["maghp","wla","whopq_full"],
-  "vaccines__hepatitis_e":   ["maghp","wla","whopq_full"],
-  "vaccines__influenza":     ["maghp","wla","whopq_full"],
-  "vaccines__japanese_enceph":["maghp","wla","whopq_full"],
-  "vaccines__malaria":       ["maghp","wla","whopq_full"],
-  "vaccines__rabies":        ["maghp","wla","whopq_full"],
-  "vaccines__typhoid":       ["maghp","wla","whopq_full"],
-  "vaccines__varicella":     ["maghp","wla","whopq_full"],
+  // Also WHO PQ + EU-M4all (WHO PQ eligibility taken to confer EU-M4all eligibility):
+  "vaccines__chikungunya":   ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__dengue":        ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__hepatitis_a":   ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__hepatitis_e":   ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__influenza":     ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__japanese_enceph":["eum4all","maghp","wla","whopq_full"],
+  "vaccines__malaria":       ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__rabies":        ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__typhoid":       ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__varicella":     ["eum4all","maghp","wla","whopq_full"],
   // EU-M4all WHO-priority-disease vaccines (not on WHO PQ vaccine list):
   "vaccines__cchf":          ["eum4all","maghp"],
   "vaccines__disease_x":     ["eum4all","maghp"],
