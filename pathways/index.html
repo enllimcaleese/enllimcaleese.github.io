@@ -179,6 +179,7 @@ select:focus { outline: none; border-color: var(--accent2); }
       <option value="disease_x">Disease X</option>
       <option value="tobacco">Disorders caused by tobacco use</option>
       <option value="ebola">Ebola virus disease</option>
+      <option value="group_b_strep">Group B streptococcus</option>
       <option value="hib">Haemophilus influenzae type B (Hib)</option>
       <option value="hepatitis_b">Hepatitis B</option>
       <option value="hepatitis_c">Hepatitis C</option>
@@ -193,7 +194,7 @@ select:focus { outline: none; border-color: var(--accent2); }
       <option value="marburg">Marburg virus disease</option>
       <option value="maternal">Maternal and reproductive health</option>
       <option value="measles">Measles</option>
-      <option value="meningitis">Meningitis</option>
+      <option value="meningitis">Meningococcal disease</option>
       <option value="mers_sars">Middle East respiratory syndrome coronavirus (MERS-CoV) and Severe Acute Respiratory Syndrome (SARS)</option>
       <option value="mdr_bacterial">Multi-drug resistant bacterial infections</option>
       <option value="mpox">Mpox</option>
@@ -208,6 +209,7 @@ select:focus { outline: none; border-color: var(--accent2); }
       <option value="rift_valley">Rift Valley fever</option>
       <option value="rotavirus">Rotavirus (Rota)</option>
       <option value="rubella">Rubella</option>
+      <option value="shigella">Shigella</option>
       <option value="tetanus">Tetanus</option>
       <option value="tb">Tuberculosis</option>
       <option value="typhoid">Typhoid</option>
@@ -520,6 +522,8 @@ var ELIG = {
   "vaccines__hpv":           ["eum4all","maghp","wla","whopq_full"],
   "vaccines__measles":       ["eum4all","maghp","wla","whopq_full"],
   "vaccines__meningitis":    ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__group_b_strep": ["eum4all","maghp","wla","whopq_full"],
+  "vaccines__shigella":      ["eum4all","maghp","wla","whopq_full"],
   "vaccines__mpox":          ["eum4all","maghp","wla","whopq_full"],
   "vaccines__pertussis":     ["eum4all","maghp","wla","whopq_full"],
   "vaccines__pneumococcal":  ["eum4all","maghp","wla","whopq_full"],
@@ -1118,7 +1122,9 @@ var DLABELS = {
   "lassa":"Lassa fever",
   "marburg":"Marburg virus disease",
   "measles":"Measles",
-  "meningitis":"Meningitis",
+  "meningitis":"Meningococcal disease",
+  "group_b_strep":"Group B streptococcus",
+  "shigella":"Shigella",
   "mers_sars":"MERS-CoV and SARS",
   "mpox":"Mpox",
   "mdr_bacterial":"Multi-drug resistant bacterial infections",
