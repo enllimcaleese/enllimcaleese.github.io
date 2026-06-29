@@ -167,18 +167,23 @@ select:focus { outline: none; border-color: var(--accent2); }
       <option value="">Select disease...</option>
       <option value="apnoea">Apnoea in preterm infants</option>
       <option value="bacterial_children">Bacterial infections in children</option>
+      <option value="buruli_ulcer">Buruli ulcer</option>
       <option value="cancer">Cancer</option>
-      <option value="cchf">Crimean-Congo haemorrhagic fever</option>
+      <option value="chagas">Chagas disease</option>
       <option value="chikungunya">Chikungunya</option>
       <option value="cholera">Cholera</option>
       <option value="covid">COVID-19</option>
+      <option value="cchf">Crimean-Congo haemorrhagic fever</option>
       <option value="dengue">Dengue</option>
       <option value="diabetes">Diabetes</option>
       <option value="diarrhoeal">Diarrhoeal disease</option>
       <option value="diphtheria">Diphtheria</option>
       <option value="disease_x">Disease X</option>
       <option value="tobacco">Disorders caused by tobacco use</option>
+      <option value="dracunculiasis">Dracunculiasis (guinea-worm disease)</option>
       <option value="ebola">Ebola virus disease</option>
+      <option value="echinococcosis">Echinococcosis</option>
+      <option value="foodborne_trematodiases">Foodborne trematodiases</option>
       <option value="group_b_strep">Group B streptococcus</option>
       <option value="hib">Haemophilus influenzae type B (Hib)</option>
       <option value="hepatitis_a">Hepatitis A</option>
@@ -186,20 +191,26 @@ select:focus { outline: none; border-color: var(--accent2); }
       <option value="hepatitis_c">Hepatitis C</option>
       <option value="hepatitis_e">Hepatitis E</option>
       <option value="hiv">HIV / AIDS</option>
+      <option value="human_african_tryp">Human African trypanosomiasis (sleeping sickness)</option>
       <option value="hpv">Human papillomavirus (HPV)</option>
       <option value="influenza">Influenza</option>
       <option value="japanese_enceph">Japanese encephalitis</option>
       <option value="lassa">Lassa fever</option>
+      <option value="leishmaniasis">Leishmaniasis</option>
+      <option value="leprosy">Leprosy</option>
+      <option value="lymphatic_filariasis">Lymphatic filariasis (elephantiasis)</option>
       <option value="malaria">Malaria</option>
       <option value="marburg">Marburg virus disease</option>
       <option value="maternal">Maternal and reproductive health</option>
       <option value="measles">Measles</option>
       <option value="meningitis">Meningococcal disease (Meningitis)</option>
       <option value="mers_sars">Middle East respiratory syndrome coronavirus (MERS-CoV) and Severe Acute Respiratory Syndrome (SARS)</option>
-      <option value="mdr_bacterial">Multi-drug resistant bacterial infections</option>
       <option value="mpox">Mpox</option>
-      <option value="ntds">Neglected tropical diseases (NTDs)</option>
+      <option value="mdr_bacterial">Multi-drug resistant bacterial infections</option>
+      <option value="mycetoma">Mycetoma, chromoblastomycosis and other deep mycoses</option>
       <option value="nipah">Nipah and henipaviral diseases</option>
+      <option value="noma">Noma</option>
+      <option value="onchocerciasis">Onchocerciasis (river blindness)</option>
       <option value="pain">Pain management</option>
       <option value="pertussis">Pertussis</option>
       <option value="pneumococcal">Pneumococcal disease</option>
@@ -209,11 +220,18 @@ select:focus { outline: none; border-color: var(--accent2); }
       <option value="rift_valley">Rift Valley fever</option>
       <option value="rotavirus">Rotavirus (Rota)</option>
       <option value="rubella">Rubella</option>
+      <option value="scabies">Scabies and other ectoparasitoses</option>
+      <option value="schistosomiasis">Schistosomiasis (bilharzia)</option>
       <option value="shigella">Shigella</option>
+      <option value="snakebite">Snakebite envenoming</option>
+      <option value="soil_transmitted_helminthiases">Soil-transmitted helminthiases</option>
+      <option value="taeniasis">Taeniasis / cysticercosis</option>
       <option value="tetanus">Tetanus</option>
+      <option value="trachoma">Trachoma</option>
       <option value="tb">Tuberculosis</option>
       <option value="typhoid">Typhoid</option>
       <option value="varicella">Varicella</option>
+      <option value="yaws">Yaws</option>
       <option value="yellow_fever">Yellow fever</option>
       <option value="zika">Zika</option>
     </select>
@@ -505,7 +523,25 @@ var ELIG = {
   "medicines__malaria":            ["eum4all","maghp","wla","whopq_full"],
   "medicines__maternal":           ["eum4all","maghp","wla","whopq_full"],
   "medicines__mdr_bacterial":      ["eum4all","maghp","wla","whopq_full"],
-  "medicines__ntds":               ["eum4all","maghp","wla","whopq_full"],
+  "medicines__buruli_ulcer":               ["eum4all","maghp","wla","whopq_full"],
+  "medicines__chagas":                     ["eum4all","maghp","wla","whopq_full"],
+  "medicines__dracunculiasis":             ["eum4all","maghp","wla","whopq_full"],
+  "medicines__echinococcosis":             ["eum4all","maghp","wla","whopq_full"],
+  "medicines__foodborne_trematodiases":    ["eum4all","maghp","wla","whopq_full"],
+  "medicines__human_african_tryp":         ["eum4all","maghp","wla","whopq_full"],
+  "medicines__leishmaniasis":              ["eum4all","maghp","wla","whopq_full"],
+  "medicines__leprosy":                    ["eum4all","maghp","wla","whopq_full"],
+  "medicines__lymphatic_filariasis":       ["eum4all","maghp","wla","whopq_full"],
+  "medicines__mycetoma":                   ["eum4all","maghp","wla","whopq_full"],
+  "medicines__noma":                       ["eum4all","maghp","wla","whopq_full"],
+  "medicines__onchocerciasis":             ["eum4all","maghp","wla","whopq_full"],
+  "medicines__scabies":                    ["eum4all","maghp","wla","whopq_full"],
+  "medicines__schistosomiasis":            ["eum4all","maghp","wla","whopq_full"],
+  "medicines__snakebite":                  ["eum4all","maghp","wla","whopq_full"],
+  "medicines__soil_transmitted_helminthiases": ["eum4all","maghp","wla","whopq_full"],
+  "medicines__taeniasis":                  ["eum4all","maghp","wla","whopq_full"],
+  "medicines__trachoma":                   ["eum4all","maghp","wla","whopq_full"],
+  "medicines__yaws":                       ["eum4all","maghp","wla","whopq_full"],
   "medicines__pain":               ["eum4all","maghp","wla","whopq_full"],
   "medicines__tb":                 ["eum4all","maghp","wla","whopq_full"],
   "medicines__tobacco":            ["eum4all","maghp","wla","whopq_full"],
@@ -1103,7 +1139,25 @@ var DLABELS = {
   "hepatitis_c":"Hepatitis C",
   "hepatitis_a":"Hepatitis A",
   "hepatitis_e":"Hepatitis E",
-  "ntd":"Neglected tropical diseases",
+  "buruli_ulcer":"Buruli ulcer",
+  "chagas":"Chagas disease",
+  "dracunculiasis":"Dracunculiasis (guinea-worm disease)",
+  "echinococcosis":"Echinococcosis",
+  "foodborne_trematodiases":"Foodborne trematodiases",
+  "human_african_tryp":"Human African trypanosomiasis (sleeping sickness)",
+  "leishmaniasis":"Leishmaniasis",
+  "leprosy":"Leprosy",
+  "lymphatic_filariasis":"Lymphatic filariasis (elephantiasis)",
+  "mycetoma":"Mycetoma, chromoblastomycosis and other deep mycoses",
+  "noma":"Noma",
+  "onchocerciasis":"Onchocerciasis (river blindness)",
+  "scabies":"Scabies and other ectoparasitoses",
+  "schistosomiasis":"Schistosomiasis (bilharzia)",
+  "snakebite":"Snakebite envenoming",
+  "soil_transmitted_helminthiases":"Soil-transmitted helminthiases",
+  "taeniasis":"Taeniasis / cysticercosis",
+  "trachoma":"Trachoma",
+  "yaws":"Yaws",
   "maternal":"Maternal and reproductive health",
   "covid":"COVID-19",
   "apnoea":"Apnoea in preterm infants",
