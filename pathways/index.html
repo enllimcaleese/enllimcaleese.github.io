@@ -537,7 +537,7 @@ var ELIG = {
   "medicines__onchocerciasis":             ["eum4all","maghp","wla","whopq_full"],
   "medicines__scabies":                    ["eum4all","maghp","wla","whopq_full"],
   "medicines__schistosomiasis":            ["eum4all","maghp","wla","whopq_full"],
-  "medicines__snakebite":                  ["eum4all","maghp"],  // antivenoms not prequalified via standard WHO PQ; EU-M4all + MAGHP only
+  "medicines__snakebite":                  ["eum4all","maghp","wla","whopq_full"],  // WHO PQ shown but flagged: antivenoms use Risk-Benefit Assessment Procedure
   "medicines__soil_transmitted_helminthiases": ["eum4all","maghp","wla","whopq_full"],
   "medicines__taeniasis":                  ["eum4all","maghp","wla","whopq_full"],
   "medicines__trachoma":                   ["eum4all","maghp","wla","whopq_full"],
@@ -1859,6 +1859,9 @@ function buildSVG(init) {
       else tooltipText += "; ";
       tooltipText += "World Health Organization Prequalification Abridged pathway";
     }
+    if ((id === "whopq_full" || id === "whopq_abr") && document.getElementById("sel-disease").value === "snakebite") {
+      tooltipText += " - antivenoms are assessed via WHO's Risk-Benefit Assessment Procedure, not standard prequalification";
+    }
     
     var lblHTML = parts.map(function(t, i) {
       return "<text x=\"" + (n.x + n.w/2) + "\" y=\"" + (startY + i*lineH) + "\" text-anchor=\"middle\" class=\"node-lbl\" style=\"" + (isDisabledNode ? "opacity: 0.4;" : "") + "\">" + t + "</text>";
@@ -1885,11 +1888,18 @@ function buildSVG(init) {
       maghpInfoIcon = "<circle cx=\"" + (n.x + 18) + "\" cy=\"" + (n.y + n.h - 18) + "\" r=\"10\" fill=\"#f59e0b\"/>"
         + "<text x=\"" + (n.x + 18) + "\" y=\"" + (n.y + n.h - 13) + "\" text-anchor=\"middle\" style=\"font-size: 14px; font-weight: bold; fill: white;\">ℹ</text>";
     }
-    
+
+    // Warning flag on WHO PQ nodes for antivenoms (snakebite): assessed via Risk-Benefit Assessment Procedure
+    var pqWarnIcon = "";
+    if ((id === "whopq_full" || id === "whopq_abr") && document.getElementById("sel-disease").value === "snakebite") {
+      pqWarnIcon = "<circle cx=\"" + (n.x + n.w - 14) + "\" cy=\"" + (n.y + 14) + "\" r=\"11\" fill=\"#f59e0b\"/>"
+        + "<text x=\"" + (n.x + n.w - 14) + "\" y=\"" + (n.y + 19) + "\" text-anchor=\"middle\" style=\"font-size: 15px; font-weight: bold; fill: white;\">⚠</text>";
+    }
+
     nodesHTML += "<g onclick=\"toggleCard('" + id + "')\" style=\"cursor:pointer; opacity:" + nodeOpacity + ";\">"
       + (tooltipText ? "<title>" + tooltipText + "</title>" : "")
       + "<rect x=\"" + n.x + "\" y=\"" + n.y + "\" width=\"" + n.w + "\" height=\"" + n.h + "\" rx=\"7\" fill=\"" + inf.bg + "\" stroke=\"" + inf.stroke + "\" stroke-width=\"" + (isNRA ? 2 : 1.2) + "\" style=\"" + (isDisabled ? "opacity: 0.5;" : "") + "\"/>"
-      + lblHTML + subHTML + disabledOverlay + maghpInfoIcon
+      + lblHTML + subHTML + disabledOverlay + maghpInfoIcon + pqWarnIcon
       + "</g>";
   });
   
