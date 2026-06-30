@@ -1859,7 +1859,7 @@ function buildSVG(init) {
       else tooltipText += "; ";
       tooltipText += "World Health Organization Prequalification Abridged pathway";
     }
-    if ((id === "whopq_full" || id === "whopq_abr") && document.getElementById("sel-disease").value === "snakebite") {
+    if (["whopq_full","whopq_abr","who_alt","crp_wla","crp_pq"].indexOf(id) >= 0 && document.getElementById("sel-disease").value === "snakebite") {
       tooltipText += " - antivenoms are assessed via WHO's Risk-Benefit Assessment Procedure, not standard prequalification";
     }
     
@@ -1889,9 +1889,9 @@ function buildSVG(init) {
         + "<text x=\"" + (n.x + 18) + "\" y=\"" + (n.y + n.h - 13) + "\" text-anchor=\"middle\" style=\"font-size: 14px; font-weight: bold; fill: white;\">ℹ</text>";
     }
 
-    // Warning flag on WHO PQ nodes for antivenoms (snakebite): assessed via Risk-Benefit Assessment Procedure
+    // Warning flag on WHO PQ / Alt Listing / CRP nodes for antivenoms (snakebite): assessed via Risk-Benefit Assessment Procedure
     var pqWarnIcon = "";
-    if ((id === "whopq_full" || id === "whopq_abr") && document.getElementById("sel-disease").value === "snakebite") {
+    if (["whopq_full","whopq_abr","who_alt","crp_wla","crp_pq"].indexOf(id) >= 0 && !isDisabled && document.getElementById("sel-disease").value === "snakebite") {
       pqWarnIcon = "<circle cx=\"" + (n.x + n.w - 14) + "\" cy=\"" + (n.y + 14) + "\" r=\"11\" fill=\"#f59e0b\"/>"
         + "<text x=\"" + (n.x + n.w - 14) + "\" y=\"" + (n.y + 19) + "\" text-anchor=\"middle\" style=\"font-size: 15px; font-weight: bold; fill: white;\">⚠</text>";
     }
