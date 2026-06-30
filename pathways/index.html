@@ -2050,6 +2050,11 @@ function render() {
       maghpNote = "<div style=\"font-size: 12px; color: #92400e; margin-top: 8px; padding: 10px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 4px; line-height: 1.5;\"><span style=\"font-size: 14px; margin-right: 6px;\">ℹ️</span><strong>Regional Focus:</strong> MAGHP focuses on sub-Saharan Africa and on medicines for diseases that disproportionately affect this region, although other countries or regions may also be considered.</div>";
     }
   }
+  // Snakebite antivenom note - WHO uses a dedicated Risk-Benefit Assessment Procedure
+  var snakebiteNote = "";
+  if (t === "medicines" && d === "snakebite") {
+    snakebiteNote = "<div style=\"font-size: 12px; color: #92400e; margin-top: 8px; padding: 10px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 4px; line-height: 1.5;\"><span style=\"font-size: 14px; margin-right: 6px;\">⚠️</span><strong>Antivenoms:</strong> WHO assesses snakebite antivenoms through a dedicated <a href=\"https://extranet.who.int/prequal/vaccines/antivenom-risk-benefit-assessment-procedure\" target=\"_blank\" style=\"color: #92400e; text-decoration: underline; font-weight: 500;\">Risk-Benefit Assessment Procedure</a>, which differs from the traditional WHO Prequalification process used for other products.</div>";
+  }
   // Generate pathway selector if pathways exist
   var availablePathways = getPathways(init, c);
   var pathwayHTML = "";
@@ -2084,6 +2089,7 @@ function render() {
     + "<div class=\"flow-title\">" + TLABELS[t] + " - " + DLABELS[d] + cLabel + "</div>"
     + crpNote
     + maghpNote
+    + snakebiteNote
     + legHTML
     + "<div class=\"pathway-row\">"
     + "<div class=\"flowchart\" style=\"flex: 1; min-width: 0;\"><div class=\"flow-svg-wrap\">" + res.svg + "</div></div>"
