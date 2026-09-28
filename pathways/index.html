@@ -1385,16 +1385,20 @@ function getPathways(init, selectedCountry) {
   var pathways = [];
   var inPQ = !selectedCountry || CRP_PQ_COUNTRIES.indexOf(selectedCountry) >= 0;
   var inSRA = !selectedCountry || CRP_SRA_COUNTRIES.indexOf(selectedCountry) >= 0;
-  
+  // WHO Alternative Listing and WHO PQ Abridged both require the product to be within
+  // WHO PQ scope. Products eligible only for EU-M4all/MAGHP (not WHO PQ) can only go
+  // via those routes directly to the NMRA, not through any WHO listing/PQ step.
+  var pqEligible = init.indexOf("whopq_full") >= 0;
+
   // Pathway 1: Product -> EU-M4All -> WHO Alternative Listing -> CRP WLA -> NMRA
-  if (init.indexOf("eum4all") >= 0 && inSRA) {
+  if (init.indexOf("eum4all") >= 0 && pqEligible && inSRA) {
     pathways.push({
       id: "eum_alt_crpsra",
       name: "Product → EU-M4All → WHO Alternative Listing → WHO CRP for WLAs → Target country NMRA",
       nodes: ["product", "eum4all", "who_alt", "crp_wla", "nra"],
       breakdown: "EU-M4All Standard (210 days) + WHO Alt Listing (3-4 mo) + CRP WLA (3-6 mo) + NMRA decision (varies)"
     });
-  } else if (init.indexOf("eum4all") >= 0 && !inSRA) {
+  } else if (init.indexOf("eum4all") >= 0 && pqEligible && !inSRA) {
     pathways.push({
       id: "eum_alt_direct",
       name: "Product → EU-M4All → WHO Alternative Listing → Target country NMRA",
@@ -1404,14 +1408,14 @@ function getPathways(init, selectedCountry) {
   }
   
   // Pathway 2: Product -> EU-M4All -> WHO PQ Abridged -> CRP PQ -> NMRA
-  if (init.indexOf("eum4all") >= 0 && inPQ) {
+  if (init.indexOf("eum4all") >= 0 && pqEligible && inPQ) {
     pathways.push({
       id: "eum_abr_crppq",
       name: "Product → EU-M4All → WHO PQ Abridged Pathway → WHO CRP for PQ products → Target country NMRA",
       nodes: ["product", "eum4all", "whopq_abr", "crp_pq", "nra"],
       breakdown: "EU-M4All Standard (210 days) + WHO PQ Abridged (1-3 mo) + CRP PQ (3-6 mo) + NMRA decision (varies)"
     });
-  } else if (init.indexOf("eum4all") >= 0 && !inPQ) {
+  } else if (init.indexOf("eum4all") >= 0 && pqEligible && !inPQ) {
     pathways.push({
       id: "eum_abr_direct",
       name: "Product → EU-M4All → WHO PQ Abridged Pathway → Target country NMRA",
@@ -1421,14 +1425,14 @@ function getPathways(init, selectedCountry) {
   }
   
   // Pathway 3: Product -> Swissmedic MAGHP -> WHO Alternative Listing -> CRP WLA -> NMRA
-  if (init.indexOf("maghp") >= 0 && inSRA) {
+  if (init.indexOf("maghp") >= 0 && pqEligible && inSRA) {
     pathways.push({
       id: "maghp_alt_crpsra",
       name: "Product → Swissmedic MAGHP → WHO Alternative Listing → WHO CRP for WLAs → Target country NMRA",
       nodes: ["product", "maghp", "who_alt", "crp_wla", "nra"],
       breakdown: "Swissmedic MAGHP Standard (330 days) + WHO Alt Listing (3-4 mo) + CRP WLA (3-6 mo) + NMRA decision (varies)"
     });
-  } else if (init.indexOf("maghp") >= 0 && !inSRA) {
+  } else if (init.indexOf("maghp") >= 0 && pqEligible && !inSRA) {
     pathways.push({
       id: "maghp_alt_direct",
       name: "Product → Swissmedic MAGHP → WHO Alternative Listing → Target country NMRA",
@@ -1438,14 +1442,14 @@ function getPathways(init, selectedCountry) {
   }
   
   // Pathway 4: Product -> Swissmedic MAGHP -> WHO PQ Abridged -> CRP PQ -> NMRA
-  if (init.indexOf("maghp") >= 0 && inPQ) {
+  if (init.indexOf("maghp") >= 0 && pqEligible && inPQ) {
     pathways.push({
       id: "maghp_abr_crppq",
       name: "Product → Swissmedic MAGHP → WHO PQ Abridged Pathway → WHO CRP for PQ products → Target country NMRA",
       nodes: ["product", "maghp", "whopq_abr", "crp_pq", "nra"],
       breakdown: "Swissmedic MAGHP Standard (330 days) + WHO PQ Abridged (1-3 mo) + CRP PQ (3-6 mo) + NMRA decision (varies)"
     });
-  } else if (init.indexOf("maghp") >= 0 && !inPQ) {
+  } else if (init.indexOf("maghp") >= 0 && pqEligible && !inPQ) {
     pathways.push({
       id: "maghp_abr_direct",
       name: "Product → Swissmedic MAGHP → WHO PQ Abridged Pathway → Target country NMRA",
@@ -1585,8 +1589,11 @@ function buildSVG(init) {
   var hasFDA   = init.indexOf("fda_ta")    >= 0;
   var hasSRA   = init.indexOf("wla")       >= 0;
   var hasPQF   = init.indexOf("whopq_full")>= 0;
-  var hasAlt   = hasEUM || hasMAGHP || hasFDA;
-  var hasAbr   = hasSRA || hasEUM || hasMAGHP || hasFDA;
+  // WHO Alternative Listing and WHO PQ Abridged are WHO PQ routes, so they only
+  // appear when the product is within WHO PQ scope. Products eligible only for
+  // EU-M4all/MAGHP go directly from those nodes to the NMRA.
+  var hasAlt   = hasPQF && (hasEUM || hasMAGHP || hasFDA);
+  var hasAbr   = hasPQF && (hasSRA || hasEUM || hasMAGHP || hasFDA);
   
   // Check if selected country participates in CRPs
   var selectedCountry = document.getElementById("sel-country").value;
@@ -1599,12 +1606,15 @@ function buildSVG(init) {
   var crpSraDisabled = false;
   var crpPqDisabled = false;
   
-  // Row Y positions
+  // Row Y positions. Middle rows collapse when unused so the NMRA sits directly
+  // below the deepest populated row (e.g. EU-M4all/MAGHP-only products go row 1 -> NMRA).
+  var hasRow2 = hasAlt || hasAbr;                 // WHO Alternative Listing / PQ Abridged
+  var hasRow3 = hasAlt || hasAbr || hasPQF;       // CRP layer
   var y0 = PAD;           // Product
   var y1 = y0 + BH + RGAP; // Initial pathways
   var y2 = y1 + BH + RGAP; // WHO intermediate (alt listing / abridged)
   var y3 = y2 + BH + RGAP; // CRP layer
-  var y4 = y3 + BH + RGAP; // NRA
+  var y4 = (hasRow3 ? y3 : (hasRow2 ? y2 : y1)) + BH + RGAP; // NRA, directly below last populated row
   
   var nodes = {};
   
