@@ -204,7 +204,7 @@ select:focus { outline: none; border-color: var(--accent2); }
       <option value="lymphoma_leukaemia">Lymphoma and leukaemia</option>
       <option value="malaria">Malaria</option>
       <option value="marburg">Marburg virus disease</option>
-      <option value="maternal">Maternal and reproductive health</option>
+      <option value="maternal">Maternal health</option>
       <option value="measles">Measles</option>
       <option value="meningitis">Meningococcal disease (Meningitis)</option>
       <option value="mers_sars">Middle East respiratory syndrome coronavirus (MERS-CoV) and Severe Acute Respiratory Syndrome (SARS)</option>
@@ -220,6 +220,7 @@ select:focus { outline: none; border-color: var(--accent2); }
       <option value="pneumococcal">Pneumococcal disease</option>
       <option value="polio">Polio</option>
       <option value="rabies">Rabies</option>
+      <option value="reproductive">Reproductive health</option>
       <option value="rsv">Respiratory Syncytial Virus (RSV)</option>
       <option value="rift_valley">Rift Valley fever</option>
       <option value="rotavirus">Rotavirus (Rota)</option>
@@ -532,7 +533,8 @@ var ELIG = {
   "medicines__hiv":                ["fda_ta","eum4all","maghp","wla","whopq_full"],
   "medicines__influenza":          ["eum4all","maghp","wla","whopq_full"],
   "medicines__malaria":            ["eum4all","maghp","wla","whopq_full"],
-  "medicines__maternal":           ["eum4all","maghp","wla","whopq_full"],
+  "medicines__maternal":           ["eum4all","maghp"],  // EU-M4all covers maternal healthcare; not on WHO PQ list
+  "medicines__reproductive":       ["eum4all","maghp","wla","whopq_full"],  // WHO PQ "reproductive health"
   "medicines__newborn":            ["eum4all","maghp"],  // EU-M4all covers newborn healthcare; not on WHO PQ list
   "medicines__mdr_bacterial":      ["eum4all","maghp","wla","whopq_full"],
   "medicines__buruli_ulcer":               ["eum4all","maghp","wla","whopq_full"],
@@ -1176,7 +1178,8 @@ var DLABELS = {
   "taeniasis":"Taeniasis / cysticercosis",
   "trachoma":"Trachoma",
   "yaws":"Yaws",
-  "maternal":"Maternal and reproductive health",
+  "maternal":"Maternal health",
+  "reproductive":"Reproductive health",
   "covid":"COVID-19",
   "apnoea":"Apnoea in preterm infants",
   "bacterial_children":"Bacterial infections in children",
