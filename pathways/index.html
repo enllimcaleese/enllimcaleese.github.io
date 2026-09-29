@@ -2110,6 +2110,13 @@ function render() {
   } else if (t === "medicines" && (d === "breast_cancer" || d === "stomach_cancer" || d === "gastroesophageal_cancer")) {
     cancerNote = "<div style=\"font-size: 12px; color: #92400e; margin-top: 8px; padding: 10px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 4px; line-height: 1.5;\"><span style=\"font-size: 14px; margin-right: 6px;\">⚠️</span><strong>Scope:</strong> WHO Prequalification eligibility for this indication currently covers <strong>Trastuzumab</strong> only.</div>";
   }
+  // WHO PQ vaccine priority note - only for vaccines that are entirely low/no priority
+  var priorityNote = "";
+  if (t === "vaccines" && d === "japanese_enceph") {
+    priorityNote = "<div style=\"font-size: 12px; color: #92400e; margin-top: 8px; padding: 10px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 4px; line-height: 1.5;\"><span style=\"font-size: 14px; margin-right: 6px;\">⚠️</span><strong>WHO PQ priority:</strong> This is a <strong>low-priority</strong> vaccine on the WHO Prequalification vaccine priority list.</div>";
+  } else if (t === "vaccines" && d === "influenza") {
+    priorityNote = "<div style=\"font-size: 12px; color: #92400e; margin-top: 8px; padding: 10px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 4px; line-height: 1.5;\"><span style=\"font-size: 14px; margin-right: 6px;\">⚠️</span><strong>WHO PQ priority:</strong> This is a <strong>low- to no-priority</strong> vaccine on the WHO Prequalification vaccine priority list.</div>";
+  }
   // Generate pathway selector if pathways exist
   var availablePathways = getPathways(init, c);
   var pathwayHTML = "";
@@ -2146,6 +2153,7 @@ function render() {
     + maghpNote
     + snakebiteNote
     + cancerNote
+    + priorityNote
     + legHTML
     + "<div class=\"pathway-row\">"
     + "<div class=\"flowchart\" style=\"flex: 1; min-width: 0;\"><div class=\"flow-svg-wrap\">" + res.svg + "</div></div>"
