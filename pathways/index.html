@@ -167,10 +167,11 @@ select:focus { outline: none; border-color: var(--accent2); }
       <option value="">Select disease...</option>
       <option value="apnoea">Apnoea in preterm infants</option>
       <option value="bacterial_children">Bacterial infections in children</option>
+      <option value="breast_cancer">Breast cancer</option>
       <option value="buruli_ulcer">Buruli ulcer</option>
-      <option value="cancer">Cancer</option>
       <option value="chagas">Chagas disease</option>
       <option value="chikungunya">Chikungunya</option>
+      <option value="childhood_cancer">Childhood cancer</option>
       <option value="cholera">Cholera</option>
       <option value="covid">COVID-19</option>
       <option value="cchf">Crimean-Congo haemorrhagic fever</option>
@@ -184,6 +185,7 @@ select:focus { outline: none; border-color: var(--accent2); }
       <option value="ebola">Ebola virus disease</option>
       <option value="echinococcosis">Echinococcosis</option>
       <option value="foodborne_trematodiases">Foodborne trematodiases</option>
+      <option value="gastroesophageal_cancer">Gastroesophageal cancer</option>
       <option value="group_b_strep">Group B streptococcus</option>
       <option value="hib">Haemophilus influenzae type B (Hib)</option>
       <option value="hepatitis_a">Hepatitis A</option>
@@ -199,6 +201,7 @@ select:focus { outline: none; border-color: var(--accent2); }
       <option value="leishmaniasis">Leishmaniasis</option>
       <option value="leprosy">Leprosy</option>
       <option value="lymphatic_filariasis">Lymphatic filariasis</option>
+      <option value="lymphoma_leukaemia">Lymphoma and leukaemia</option>
       <option value="malaria">Malaria</option>
       <option value="marburg">Marburg virus disease</option>
       <option value="maternal">Maternal and reproductive health</option>
@@ -227,6 +230,7 @@ select:focus { outline: none; border-color: var(--accent2); }
       <option value="sickle_cell">Sickle cell disease</option>
       <option value="snakebite">Snakebite envenoming</option>
       <option value="soil_transmitted_helminthiases">Soil-transmitted helminthiases</option>
+      <option value="stomach_cancer">Stomach cancer</option>
       <option value="substance_use">Substance use disorder</option>
       <option value="taeniasis">Taeniasis / cysticercosis</option>
       <option value="tetanus">Tetanus</option>
@@ -514,7 +518,11 @@ var ELIG = {
   // FDA TA (PEPFAR) for HIV/ARVs only.
   "medicines__apnoea":             ["eum4all","maghp","wla","whopq_full"],
   "medicines__bacterial_children": ["eum4all","maghp","wla","whopq_full"],
-  "medicines__cancer":             ["eum4all","maghp","wla","whopq_full"],
+  "medicines__childhood_cancer":        ["eum4all","maghp","wla","whopq_full"],
+  "medicines__lymphoma_leukaemia":      ["eum4all","maghp","wla","whopq_full"],
+  "medicines__breast_cancer":           ["eum4all","maghp","wla","whopq_full"],
+  "medicines__stomach_cancer":          ["eum4all","maghp","wla","whopq_full"],
+  "medicines__gastroesophageal_cancer": ["eum4all","maghp","wla","whopq_full"],
   "medicines__covid":              ["eum4all","maghp","wla","whopq_full"],
   "medicines__diabetes":           ["eum4all","maghp","wla","whopq_full"],
   "medicines__diarrhoeal":         ["eum4all","maghp","wla","whopq_full"],
@@ -1197,7 +1205,11 @@ var DLABELS = {
   "mdr_bacterial":"Multi-drug resistant bacterial infections",
   "newborn":"Newborn healthcare",
   "nipah":"Nipah and henipaviral diseases",
-  "cancer":"Cancer",
+  "childhood_cancer":"Childhood cancer",
+  "lymphoma_leukaemia":"Lymphoma and leukaemia",
+  "breast_cancer":"Breast cancer",
+  "stomach_cancer":"Stomach cancer",
+  "gastroesophageal_cancer":"Gastroesophageal cancer",
   "pertussis":"Pertussis",
   "pneumococcal":"Pneumococcal disease",
   "polio":"Polio",
@@ -2088,6 +2100,13 @@ function render() {
   if (t === "medicines" && d === "snakebite") {
     snakebiteNote = "<div style=\"font-size: 12px; color: #92400e; margin-top: 8px; padding: 10px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 4px; line-height: 1.5;\"><span style=\"font-size: 14px; margin-right: 6px;\">⚠️</span><strong>Antivenoms:</strong> WHO assesses snakebite antivenoms through a dedicated <a href=\"https://extranet.who.int/prequal/vaccines/antivenom-risk-benefit-assessment-procedure\" target=\"_blank\" style=\"color: #92400e; text-decoration: underline; font-weight: 500;\">Risk-Benefit Assessment Procedure</a>, which differs from the traditional WHO Prequalification process used for other products.</div>";
   }
+  // Cancer-drug scope notes: WHO PQ cancer eligibility covers only rituximab / trastuzumab
+  var cancerNote = "";
+  if (t === "medicines" && d === "lymphoma_leukaemia") {
+    cancerNote = "<div style=\"font-size: 12px; color: #92400e; margin-top: 8px; padding: 10px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 4px; line-height: 1.5;\"><span style=\"font-size: 14px; margin-right: 6px;\">⚠️</span><strong>Scope:</strong> WHO Prequalification eligibility for this indication currently covers <strong>Rituximab</strong> only.</div>";
+  } else if (t === "medicines" && (d === "breast_cancer" || d === "stomach_cancer" || d === "gastroesophageal_cancer")) {
+    cancerNote = "<div style=\"font-size: 12px; color: #92400e; margin-top: 8px; padding: 10px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 4px; line-height: 1.5;\"><span style=\"font-size: 14px; margin-right: 6px;\">⚠️</span><strong>Scope:</strong> WHO Prequalification eligibility for this indication currently covers <strong>Trastuzumab</strong> only.</div>";
+  }
   // Generate pathway selector if pathways exist
   var availablePathways = getPathways(init, c);
   var pathwayHTML = "";
@@ -2123,6 +2142,7 @@ function render() {
     + crpNote
     + maghpNote
     + snakebiteNote
+    + cancerNote
     + legHTML
     + "<div class=\"pathway-row\">"
     + "<div class=\"flowchart\" style=\"flex: 1; min-width: 0;\"><div class=\"flow-svg-wrap\">" + res.svg + "</div></div>"
