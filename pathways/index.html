@@ -2122,7 +2122,7 @@ function render() {
   // Newborn healthcare note - points to specific WHO PQ-eligible newborn/child conditions
   var newbornNote = "";
   if (t === "medicines" && d === "newborn") {
-    newbornNote = "<div style=\"font-size: 12px; color: #92400e; margin-top: 8px; padding: 10px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 4px; line-height: 1.5;\"><span style=\"font-size: 14px; margin-right: 6px;\">ℹ️</span>This covers general newborn healthcare. Specific conditions such as <strong>apnoea in preterm infants</strong> and <strong>bacterial infections in children</strong> are listed separately and are eligible for WHO Prequalification — select those directly if they apply to your product.</div>";
+    newbornNote = "<div style=\"font-size: 12px; color: #92400e; margin-top: 8px; padding: 10px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 4px; line-height: 1.5;\"><span style=\"font-size: 14px; margin-right: 6px;\">ℹ️</span>Specific conditions such as <strong>apnoea in preterm infants</strong> and <strong>bacterial infections in children</strong> are listed separately and are eligible for WHO Prequalification — select those directly if they apply to your product.</div>";
   }
   // Generate pathway selector if pathways exist
   var availablePathways = getPathways(init, c);
