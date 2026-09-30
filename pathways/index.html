@@ -2117,7 +2117,7 @@ function render() {
   } else if (t === "vaccines" && d === "influenza") {
     priorityNote = "<div style=\"font-size: 12px; color: #92400e; margin-top: 8px; padding: 10px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 4px; line-height: 1.5;\"><span style=\"font-size: 14px; margin-right: 6px;\">⚠️</span><strong>WHO PQ priority:</strong> This is a <strong>low-priority</strong> vaccine on the WHO Prequalification vaccine priority list.</div>";
   } else if (t === "vaccines" && (d === "covid" || d === "mpox" || d === "shigella" || d === "group_b_strep")) {
-    priorityNote = "<div style=\"font-size: 12px; color: #92400e; margin-top: 8px; padding: 10px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 4px; line-height: 1.5;\"><span style=\"font-size: 14px; margin-right: 6px;\">⚠️</span><strong>WHO PQ status:</strong> This is a <strong>candidate vaccine</strong>, under consideration for WHO Prequalification pending development, per the current WHO vaccine priority list.</div>";
+    priorityNote = "<div style=\"font-size: 12px; color: #92400e; margin-top: 8px; padding: 10px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 4px; line-height: 1.5;\"><span style=\"font-size: 14px; margin-right: 6px;\">⚠️</span><strong>WHO PQ Status:</strong> This is a <strong>potential candidate vaccine</strong> to be considered during the biennium if development is completed and addresses Public Health needs, per the current WHO vaccine priority list.</div>";
   }
   // Generate pathway selector if pathways exist
   var availablePathways = getPathways(init, c);
