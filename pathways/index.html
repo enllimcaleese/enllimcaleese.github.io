@@ -2082,11 +2082,11 @@ function render() {
     var inPQ = CRP_PQ_COUNTRIES.indexOf(c) >= 0;
     var inSRA = CRP_SRA_COUNTRIES.indexOf(c) >= 0;
     if (!inPQ && !inSRA) {
-      crpNote = "<div style=\"font-size: 12px; color: #d97706; margin-top: 4px; font-weight: 500;\">⚠️ (As of February 2026) " + COUNTRIES[c] + " does not participate in WHO CRP for WLAs or WHO CRP for PQ products -- its NMRA cannot access WHO's prequalification assessment or inspection reports during its review</div>";
+      crpNote = "<div style=\"font-size: 12px; color: #d97706; margin-top: 4px; font-weight: 500;\">⚠️ (As of July 2026) " + COUNTRIES[c] + " does not participate in WHO CRP for WLAs or WHO CRP for PQ products -- its NMRA cannot access WHO's prequalification assessment or inspection reports during its review</div>";
     } else if (!inPQ) {
-      crpNote = "<div style=\"font-size: 12px; color: #d97706; margin-top: 4px; font-weight: 500;\">⚠️ (As of February 2026) " + COUNTRIES[c] + " does not participate in WHO CRP for PQ products -- its NMRA cannot access WHO's prequalification assessment or inspection reports during its review</div>";
+      crpNote = "<div style=\"font-size: 12px; color: #d97706; margin-top: 4px; font-weight: 500;\">⚠️ (As of July 2026) " + COUNTRIES[c] + " does not participate in WHO CRP for PQ products -- its NMRA cannot access WHO's prequalification assessment or inspection reports during its review</div>";
     } else if (!inSRA) {
-      crpNote = "<div style=\"font-size: 12px; color: #d97706; margin-top: 4px; font-weight: 500;\">⚠️ (As of February 2026) " + COUNTRIES[c] + " does not participate in WHO CRP for WLAs -- its NMRA cannot access WHO's prequalification assessment or inspection reports during its review</div>";
+      crpNote = "<div style=\"font-size: 12px; color: #d97706; margin-top: 4px; font-weight: 500;\">⚠️ (As of July 2026) " + COUNTRIES[c] + " does not participate in WHO CRP for WLAs -- its NMRA cannot access WHO's prequalification assessment or inspection reports during its review</div>";
     }
   }
   
